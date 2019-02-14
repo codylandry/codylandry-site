@@ -1,13 +1,17 @@
 <template>
   <div class="left-sidebar">
-
+    <project-view/>
   </div>
 </template>
 
 <script>
+  import ProjectView from '@/components/project-view'
   import useMakeResizeable from '@/hooks/make-resizeable'
   import store from '@/store'
   export default {
+    components: {
+      ProjectView
+    },
     hooks () {
       useMakeResizeable({
         selector: '.left-sidebar',

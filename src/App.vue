@@ -79,6 +79,7 @@ export default {
 
   &__editor
     grid-area editor
+    z-index 1
 
   &__file-opts
     grid-area file-opts
@@ -97,6 +98,7 @@ export default {
 
   &__bottom-bar
     grid-area bottom-bar
+    z-index 2
 
   &__bottom-bar-tabs
     grid-area bottom-bar-tabs

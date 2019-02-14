@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import fileSystem from './fileSystem.json'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    fileSystem,
     layout: {
       leftSidebar: {
         width: 225,
@@ -27,47 +28,6 @@ export default new Vuex.Store({
 
     disableTextSelect: false,
 
-    fileSystem: {
-      'name': '~',
-      'type': 'dir',
-      'contents': [
-        {
-          'name': 'file1',
-          'type': 'text',
-          'contents': 'Hello World!',
-          'description': 'FOOO'
-        },
-        {
-          'name': 'pic.jpg',
-          'type': 'img',
-          'contents': '/images/penguin.png',
-          'caption': 'What a beautiful penguin.'
-        },
-        {
-          'name': 'dir1',
-          'type': 'dir',
-          'contents': [
-            {
-              'name': 'file2',
-              'type': 'text',
-              'contents': 'foo'
-            },
-            {
-              'name': 'foo',
-              'type': 'dir',
-              'contents': [
-                {
-                  'name': 'file3',
-                  'type': 'exec',
-                  'contents': 'http://google.com',
-                  'description': 'blahblah'
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
   },
   mutations: {
     UPDATE_LEFT_SIDEBAR_WIDTH (state, newWidth) {

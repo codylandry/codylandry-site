@@ -22,17 +22,7 @@
         commands
       )
 
-      term.enqueue('login')
-        .enqueue('clark')
-        .enqueue('******')
-        .enqueue('cat file1')
-        .enqueue('help')
-        .enqueue('ls -l')
-        .enqueue('cd dir1/foo')
-        .enqueue('ls')
-        .enqueue('cd ../..')
-        .enqueue('ls dir1/foo')
-        .enqueue('tree')
+      term.enqueue('cd codylandry')
         .begin(document.getElementById('js-terminal'))
     }
   }
