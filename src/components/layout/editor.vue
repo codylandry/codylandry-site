@@ -12,14 +12,34 @@
              :extension="file.extension"/>
       </div>
     </div>
-    <pre v-if="activeFile" ref="files" :key="activeFile.name">
-<code :class="`language-${activeFile.extension}`">{{ activeFile.contents }}</code>
-    </pre>
+    <!--<pre v-if="activeFile" ref="files" :key="activeFile.name">-->
+<!--<code :class="`language-${activeFile.extension}`">{{ activeFile.contents }}</code>-->
+    <!--</pre>-->
+    <div style="height: 100%" ref="files" :key="activeFile.id">
+
+    </div>
   </div>
 </template>
 
 <script>
   import PanelTab from '@/components/panel-tab'
+  import CodeMirror from 'codemirror'
+  import 'codemirror/lib/codemirror.css'
+  import 'codemirror/addon/fold/foldgutter.js'
+  import 'codemirror/addon/fold/comment-fold'
+  import 'codemirror/addon/fold/foldcode'
+  import 'codemirror/addon/fold/brace-fold'
+  import 'codemirror/addon/fold/indent-fold'
+  import 'codemirror/addon/fold/markdown-fold'
+  import 'codemirror/addon/fold/foldgutter.css'
+  import 'codemirror/mode/javascript/javascript'
+  import 'codemirror/mode/xml/xml'
+  import 'codemirror/mode/css/css'
+  import 'codemirror/mode/vue/vue'
+  import 'codemirror/mode/htmlmixed/htmlmixed'
+  import 'codemirror/mode/stylus/stylus'
+  import 'codemirror/mode/python/python'
+  import 'codemirror/mode/markdown/markdown'
 
   export default {
     components: {PanelTab},
@@ -47,8 +67,27 @@
       async highlight () {
         await this.$nextTick()
         if (this.$refs.files) {
-          hljs.highlightBlock(this.$refs.files)
-          hljs.lineNumbersBlock(this.$refs.files)
+          // hljs.highlightBlock(this.$refs.files)
+          // hljs.lineNumbersBlock(this.$refs.files)
+          const modeMap = {
+            VUE: 'vue',
+            HTML: 'htmlmixed',
+            JS: 'javascript',
+            STYL: 'css',
+            CSS: 'css',
+            SVG: 'xml',
+            JSON: 'javascript',
+            MD: 'markdown'
+          }
+
+          var myCodeMirror = CodeMirror(this.$refs.files, {
+            value: this.activeFile.contents,
+            mode:  {name: modeMap[this.activeFile.extension], json: true},
+            theme: 'darcula',
+            lineNumbers: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+          });
         }
       },
       openFile (file) {
