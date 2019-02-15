@@ -60,3 +60,7 @@
   }
 </script>
 
+<style lang="stylus" scoped>
+  svg
+    cursor: default
+</style>

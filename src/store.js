@@ -90,6 +90,14 @@ export default new Vuex.Store({
       }
       Vue.set(state, 'activeFile', file)
     },
+    CLOSE_FILE (state, file) {
+      const idx = state.openFiles.findIndex(f => f.id === file.id)
+      Vue.delete(state.openFiles, idx)
+
+      if (file.id === state.activeFile.id) {
+        Vue.set(state, 'activeFile', state.openFiles[idx - 1] || null)
+      }
+    },
     TOGGLE_FOLDER (state, folder) {
       Vue.set(folder, 'expanded', !folder.expanded)
     }

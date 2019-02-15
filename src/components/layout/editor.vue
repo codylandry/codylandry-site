@@ -2,26 +2,27 @@
   <div class="editor">
     <div class="tab-bar">
       <div class="tabs">
-        <tab v-for="(file, $index) in openFiles"
+        <panel-tab v-for="(file, $index) in openFiles"
              :active="activeFile.id === file.id"
              :key="$index"
              :name="file.name"
+             @close="closeFile(file)"
              :color="file.iconColor"
              @click.native="openFile(file)"
              :extension="file.extension"/>
       </div>
     </div>
-    <pre ref="files" :key="activeFile.name">
+    <pre v-if="activeFile" ref="files" :key="activeFile.name">
 <code :class="`language-${activeFile.extension}`">{{ activeFile.contents }}</code>
     </pre>
   </div>
 </template>
 
 <script>
-  import Tab from '@/components/tab'
+  import PanelTab from '@/components/panel-tab'
 
   export default {
-    components: {Tab},
+    components: {PanelTab},
     computed: {
       openFiles () {
         return this.$store.state.openFiles
@@ -45,11 +46,16 @@
     methods: {
       async highlight () {
         await this.$nextTick()
-        hljs.highlightBlock(this.$refs.files)
-        hljs.lineNumbersBlock(this.$refs.files)
+        if (this.$refs.files) {
+          hljs.highlightBlock(this.$refs.files)
+          hljs.lineNumbersBlock(this.$refs.files)
+        }
       },
       openFile (file) {
         this.$store.commit('SET_ACTIVE_FILE', file)
+      },
+      closeFile (file) {
+        this.$store.commit('CLOSE_FILE', file)
       }
     }
   }

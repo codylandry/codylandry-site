@@ -9,10 +9,14 @@
     <bottom-bar class="app__bottom-bar"/>
     <context-bar class="app__context-bar"/>
     <bottom-bar-tabs class="app__bottom-bar-tabs"/>
+    <left-tab-bar class="app__left-tab-bar"/>
+    <right-tab-bar class="app__right-tab-bar"/>
   </div>
 </template>
 
 <script>
+import LeftTabBar from '@/components/layout/left-tab-bar'
+import RightTabBar from '@/components/layout/right-tab-bar'
 import Editor from '@/components/layout/editor'
 import LeftSidebar from '@/components/layout/left-sidebar'
 import RightSidebar from '@/components/layout/right-sidebar'
@@ -28,7 +32,9 @@ export default {
     RightSidebar,
     BottomBar,
     ContextBar,
-    BottomBarTabs
+    BottomBarTabs,
+    LeftTabBar,
+    RightTabBar,
   },
   computed: {
     appGridTemplateColumns () {
@@ -41,16 +47,15 @@ export default {
     },
     appGridTemplateRows () {
       const { bottomBar } = this.$store.state.layout
-      const editorHeight = 125 + bottomBar.height
-      return `25px 25px 25px calc(100vh - ${editorHeight}px) ${bottomBar.height}px 25px 25px`
+      const editorHeight = 100 + bottomBar.height
+      return `25px 25px calc(100vh - ${editorHeight}px) ${bottomBar.height}px 25px 25px`
     },
     appGridTemplateAreas () {
       return `
         ".                .                 .                 .                     ."
         ".                .                 .                 .                     ."
-        ".                .                 .                 .                     ."
-        ".                left-sidebar      editor            right-sidebar         ."
-        ".                bottom-bar        bottom-bar        bottom-bar            ."
+        "left-tab-bar     left-sidebar      editor            right-sidebar         right-tab-bar"
+        "left-tab-bar     bottom-bar        bottom-bar        bottom-bar            right-tab-bar"
         "bottom-bar-tabs  bottom-bar-tabs   bottom-bar-tabs   bottom-bar-tabs       bottom-bar-tabs"
         "context-bar      context-bar       context-bar       context-bar           context-bar"
       `
@@ -108,6 +113,13 @@ export default {
   &__bottom-bar-tabs
     grid-area bottom-bar-tabs
     z-index 2
+
+  &__left-tab-bar
+    grid-area left-tab-bar
+
+  &__right-tab-bar
+    grid-area right-tab-bar
+
 
 
 </style>

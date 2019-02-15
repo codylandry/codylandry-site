@@ -1,8 +1,10 @@
 <template>
   <div class="tab" :class="active ? 'tab--selected' : ''">
-    <file-icon style="height: 14px; width: 14px" :color="color" :extension="extension"/>
+    <slot name="icon">
+      <file-icon v-if="showIcon" style="height: 14px; width: 14px" :color="color" :extension="extension"/>
+    </slot>
     <span class="tab__name">{{ name }}</span>
-    <i class="fa fa-times tab__close"></i>
+    <i v-if="showClose" @click.stop="$emit('close')" class="fa fa-times tab__close"></i>
   </div>
 </template>
 
@@ -25,6 +27,14 @@
       },
       active: {
         type: Boolean
+      },
+      showIcon: {
+        type: Boolean,
+        'default': true
+      },
+      showClose: {
+        type: Boolean,
+        'default': true
       }
     }
   }

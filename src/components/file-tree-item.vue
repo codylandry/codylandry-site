@@ -6,8 +6,8 @@
           <img v-else src="../assets/img/arrow-right.svg" @click="toggleExpanded">
           <i class="fa fa-folder"></i>
         </span>
-        <span v-else class="file-tree__file__icon" @click="openFile">
-          <file-icon style="height: 14px; width: 14px;" :name="item.name" :color="item.iconColor" :extension="item.extension"/>
+        <span v-else class="file-tree__file__icon">
+          <file-icon @click.native="openFile" style="height: 14px; width: 14px;" :name="item.name" :color="item.iconColor" :extension="item.extension"/>
         </span>
         <span class="file-tree-item__name" @click="openFile">{{ item.name }}</span>
     </div>
@@ -23,6 +23,7 @@
 
 <script>
   import FileIcon from './file-icon'
+  import _ from 'lodash'
 
   export default {
     name: 'file-tree-item',
@@ -61,7 +62,7 @@
           ? 'file-tree__folder'
           : 'file-tree__file'
 
-        const selectedClass = this.activeFile.id === this.item.id
+        const selectedClass = _.get(this, 'activeFile.id') === this.item.id
           ? `${typeClass}--selected`
           : ''
 
