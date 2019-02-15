@@ -1,37 +1,48 @@
 const fs = require('fs')
 const path = require('path')
 
+function makeid() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-const allFilesSync = (dir, fileList = []) => {
-  fs.readdirSync(dir).forEach(file => {
-    const filePath = path.join(dir, file)
+  for (var i = 0; i < 10; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    fileList.push(
-      fs.statSync(filePath).isDirectory()
-        ? {[file]: allFilesSync(filePath)}
-        : file
-    )
-  })
-  return fileList
+  return text;
+}
+
+const colorMap = {
+  STYL: '#538642',
+  JS: '#BD8E3E',
+  CSS: '#3E86A0',
+  HTML: '#579242',
+  MD: '#3E86A0'
 }
 
 const buildFs = homeDir => {
-  const buildFsDir = (dir, fileList = [], depth = 0) => {
+  const buildFsDir = (dir, fileList = [], depth = 1) => {
     fs.readdirSync(dir).forEach(file => {
       const filePath = path.join(dir, file)
+      const id = makeid()
 
       if (fs.statSync(filePath).isDirectory()) {
         fileList.push({
           name: file,
           type: 'dir',
+          id,
           depth,
+          expanded: false,
           contents: buildFsDir(filePath, [], depth + 1),
         })
       } else {
+        const extension = file.substr(file.lastIndexOf('.') + 1).toUpperCase()
         fileList.push({
+          id,
+          depth,
+          extension,
           name: file,
           type: 'text',
-          depth,
+          iconColor: colorMap[extension] || '#579242',
           contents: fs.readFileSync(filePath).toString(),
         })
       }
@@ -42,6 +53,7 @@ const buildFs = homeDir => {
   return {
     name: '~',
     type: 'dir',
+    depth: 0,
     contents: buildFsDir(homeDir)
   }
 }

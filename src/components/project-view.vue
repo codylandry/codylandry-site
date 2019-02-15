@@ -9,10 +9,7 @@
       <file-tree-item
           v-for="item in filterLinks(fileSystem.contents)"
           :key="item.name"
-          :name="item.name"
-          :depth="item.depth"
-          :type="item.type"
-          :contents="itemContents(item)"
+          :item="item"
       ></file-tree-item>
     </div>
   </div>
@@ -20,12 +17,11 @@
 
 <script>
   import FileTreeItem from './file-tree-item'
-  import FileIcon from './file-icon'
   import useMakeResizeable from '../hooks/make-resizeable'
   import store from '../store'
 
   export default {
-    components: {FileIcon, FileTreeItem},
+    components: {FileTreeItem},
     computed: {
       fileSystem () {
         return this.$store.state.fileSystem
@@ -61,6 +57,9 @@
 <style lang="stylus">
   @import "~@/stylus/variables"
 
+  .project-view
+    max-height 100%
+
   .file-opts
     background: $grey
     border: 1px solid $darkborder
@@ -71,7 +70,6 @@
     font-weight: 400
     font-size: 13px
     letter-spacing: 0.4px
-    border-right: 1px solid $darkborder
     background $grey
     position: relative
     height: 100%

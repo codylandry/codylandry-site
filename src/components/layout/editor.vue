@@ -2,17 +2,17 @@
   <div class="editor">
     <div class="tab-bar">
       <div class="tabs">
-        <tab/>
+        <tab v-for="(file, $index) in openFiles"
+             :active="activeFile.id === file.id"
+             :key="$index"
+             :name="file.name"
+             :color="file.iconColor"
+             @click.native="openFile(file)"
+             :extension="file.extension"/>
       </div>
     </div>
-    <pre>
-<code class="language-markdown">
-# Cody Landry
-----------------
-
-- Javascript
-- Python
-</code>
+    <pre ref="files" :key="activeFile.name">
+<code :class="`language-${activeFile.extension}`">{{ activeFile.contents }}</code>
     </pre>
   </div>
 </template>
@@ -22,12 +22,35 @@
 
   export default {
     components: {Tab},
-    async mounted () {
-      await this.$nextTick()
-      // eslint-disable-next-line
-      hljs.initHighlightingOnLoad()
-      // eslint-disable-next-line
-      hljs.initLineNumbersOnLoad()
+    computed: {
+      openFiles () {
+        return this.$store.state.openFiles
+      },
+      activeFile () {
+        return this.$store.state.activeFile
+      },
+      highlightWatches () {
+        return {...this.openFiles, ...this.activeFile}
+      }
+    },
+    watch: {
+      highlightWatches: {
+        immediate: true,
+        deep: true,
+        handler () {
+          this.highlight()
+        }
+      }
+    },
+    methods: {
+      async highlight () {
+        await this.$nextTick()
+        hljs.highlightBlock(this.$refs.files)
+        hljs.lineNumbersBlock(this.$refs.files)
+      },
+      openFile (file) {
+        this.$store.commit('SET_ACTIVE_FILE', file)
+      }
     }
   }
 </script>
@@ -42,6 +65,7 @@
       padding: 0
       margin: 0
       height: 100%
+      overflow auto
 
       code.hljs
         height: 100%
@@ -51,6 +75,7 @@
 
   table.hljs-ln
     width: 100%
+    height 100%
 
     > tbody > tr:last-of-type
       height: 100%
@@ -98,40 +123,15 @@
     border: 1px solid $lightborder
     border-left: none
     border-right: none
+    overflow: hidden
 
     .tabs
       display: flex
       justify-content: flex-start
       align-items: stretch
       height: 100%
+      overflow: scroll;
+      margin-bottom: -17px;
+      padding-bottom: 17px;
 
-      .tab
-        display: flex
-        align-items: center
-        justify-content: space-around
-        color: $lightgrey
-        font-weight: 400
-        font-size: 13px
-        letter-spacing: 0.4px
-        padding: 3px 8px
-        border-right: 1px solid $lightborder
-
-        &--selected
-          background: rgb(80, 86, 88)
-          border-bottom: 3px solid $blue
-
-        &__icon
-          margin-right: 5px
-
-        &__close
-          font-size: 11px
-          margin-left: 5px
-          color: #5e696e
-          position: relative
-          top: 1px
-
-        &__name
-          font-size: 11px
-          position: relative
-          top: 2px
 </style>

@@ -36,11 +36,13 @@ export default {
       const rightBar = rightSidebar.visible ? rightSidebar.width : 0
       const leftBar = leftSidebar.visible ? leftSidebar.width : 0
 
-      return `20px ${leftBar}px 1fr ${rightBar}px 20px`
+      const editorWidth = leftBar + rightBar + 40
+      return `20px ${leftBar}px calc(100vw - ${editorWidth}px) ${rightBar}px 20px`
     },
     appGridTemplateRows () {
       const { bottomBar } = this.$store.state.layout
-      return `25px 25px 25px 1fr ${bottomBar.height}px 25px 25px`
+      const editorHeight = 125 + bottomBar.height
+      return `25px 25px 25px calc(100vh - ${editorHeight}px) ${bottomBar.height}px 25px 25px`
     },
     appGridTemplateAreas () {
       return `
@@ -70,9 +72,11 @@ export default {
 </script>
 
 <style lang="stylus">
+@import "~@/stylus/variables"
 .app
   height 100vh
   display grid
+  background $grey
 
   &--disable-user-select *
     user-select none
@@ -92,6 +96,7 @@ export default {
 
   &__context-bar
     grid-area context-bar
+    z-index 2
 
   &__tab-bar
     grid-area tab-bar
@@ -102,6 +107,7 @@ export default {
 
   &__bottom-bar-tabs
     grid-area bottom-bar-tabs
+    z-index 2
 
 
 </style>

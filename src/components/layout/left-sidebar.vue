@@ -33,4 +33,6 @@
   @import "~@/stylus/variables"
   .left-sidebar
     background $grey
+    overflow: auto;
+    width: 100%;
 </style>
