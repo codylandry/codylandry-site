@@ -3,20 +3,16 @@
     <div class="tab-bar">
       <div class="tabs">
         <panel-tab v-for="(file, $index) in openFiles"
-             :active="activeFile.id === file.id"
-             :key="$index"
-             :name="file.name"
-             @close="closeFile(file)"
-             :color="file.iconColor"
-             @click.native="openFile(file)"
-             :extension="file.extension"/>
+                   :active="activeFile.id === file.id"
+                   :key="$index"
+                   :name="file.name"
+                   @close="closeFile(file)"
+                   :color="file.iconColor"
+                   @click.native="openFile(file)"
+                   :extension="file.extension"/>
       </div>
     </div>
-    <!--<pre v-if="activeFile" ref="files" :key="activeFile.name">-->
-<!--<code :class="`language-${activeFile.extension}`">{{ activeFile.contents }}</code>-->
-    <!--</pre>-->
     <div style="height: 100%" ref="files" :key="activeFile.id">
-
     </div>
   </div>
 </template>
@@ -82,12 +78,12 @@
 
           var myCodeMirror = CodeMirror(this.$refs.files, {
             value: this.activeFile.contents,
-            mode:  {name: modeMap[this.activeFile.extension], json: true},
+            mode: {name: modeMap[this.activeFile.extension], json: true},
             theme: 'darcula',
             lineNumbers: true,
             foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-          });
+            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+          })
         }
       },
       openFile (file) {
@@ -105,63 +101,6 @@
 
   .editor
     background: $darkgrey
-
-    pre
-      padding: 0
-      margin: 0
-      height: 100%
-      overflow auto
-
-      code.hljs
-        height: 100%
-
-        > table
-          height: 100%
-
-  table.hljs-ln
-    width: 100%
-    height 100%
-
-    > tbody > tr:last-of-type
-      height: 100%
-
-      > td.hljs-ln-code
-        vertical-align: text-top
-
-  /* for block of numbers */
-  .hljs-ln td.hljs-ln-numbers
-    -webkit-touch-callout: none
-    -webkit-user-select: none
-    -khtml-user-select: none
-    -moz-user-select: none
-    -ms-user-select: none
-    user-select: none
-    text-align: center
-    color: rgba(93, 97, 100, 1)
-    border-right: 1px solid rgba(85, 85, 85, 1)
-    vertical-align: top
-    padding-right: 30px
-    background: rgb(49, 51, 53)
-    font-weight: 100
-    min-width: 30px
-    max-width: 30px
-    width: 30px
-
-  .hljs-ln td.hljs-ln-numbers .hljs-ln-line.hljs-ln-n
-    font-family: "Fira Code Light", sans-serif
-    font-size: 12px
-
-  .hljs-ln-line.hljs-ln-n
-    min-width: 30px
-    max-width: 30px
-
-  /* for block of code */
-  .hljs-ln td.hljs-ln-code
-    padding-left: 8px
-    background: $darkgrey
-
-  code.hljs
-    padding: 0
 
   .tab-bar
     background: $grey
