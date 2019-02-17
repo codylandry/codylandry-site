@@ -123,6 +123,7 @@
       top: 50%;
       color: white;
       transform: translate(-50%, -50%);
+      user-select none
 
       & > div:not(:last-of-type)
         padding-bottom 20px

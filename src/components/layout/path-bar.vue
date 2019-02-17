@@ -20,7 +20,7 @@
         return this.$store.state.activeFile
       },
       path () {
-        return this.activeFile.path.split('/')
+        return (this.activeFile.path || '').split('/')
       },
       pathFolders () {
         return this.path.slice(0, this.path.length - 1)
