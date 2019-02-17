@@ -26,7 +26,8 @@ const ignored = [
   '.git',
   '.idea',
   '.DS_Store',
-  'file-system.json'
+  'file-system.json',
+  'amplify'
 ]
 
 const imageExtensions = [

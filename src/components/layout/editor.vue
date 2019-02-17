@@ -13,7 +13,14 @@
                    :extension="file.extension"/>
       </draggable>
     </div>
-    <div style="height: 100%" ref="files" :key="activeFile.id">
+    <div style="height: 100%; position: relative;" ref="files" :key="activeFile.id">
+      <div v-if="!activeFile.id && !openFiles.length" class="no-files">
+        <div><span class="no-files__txt">Search Everywhere</span><span class="no-files__key">Double ↑</span></div>
+        <div><span class="no-files__txt">Go to File</span><span class="no-files__key">⇧⌘O</span></div>
+        <div><span class="no-files__txt">Recent Files</span><span class="no-files__key">⌘E</span></div>
+        <div><span class="no-files__txt">Navigation Bar</span><span class="no-files__key">⌘↑</span></div>
+        <div><span class="no-files__txt">Drop Files Here to Open</span></div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +60,9 @@
       activeFile () {
         return this.$store.state.activeFile
       },
+      openFiles () {
+        return this.$store.state.openFiles
+      },
       highlightWatches () {
         return {...this.openFiles, ...this.activeFile}
       }
@@ -70,8 +80,6 @@
       async highlight () {
         await this.$nextTick()
         if (this.$refs.files && this.activeFile.id) {
-          // hljs.highlightBlock(this.$refs.files)
-          // hljs.lineNumbersBlock(this.$refs.files)
           const modeMap = {
             VUE: 'vue',
             HTML: 'htmlmixed',
@@ -108,6 +116,20 @@
 
   .editor
     background: $darkgrey
+
+    .no-files
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: white;
+      transform: translate(-50%, -50%);
+
+      &__txt
+        color #8f8f8f
+
+      &__key
+        color #589DF6
+        margin-left 20px
 
   .tab-bar
     background: $grey

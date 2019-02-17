@@ -1,5 +1,5 @@
 {
-  "id": "mMHP6BTMiw",
+  "id": "20UR53Ctxi",
   "name": "codylandry",
   "type": "dir",
   "expanded": true,
@@ -7,17 +7,17 @@
   "path": "codylandry",
   "contents": [
     {
-      "id": "pVWdNF8KQb",
+      "id": "mk2AQsVV9H",
       "depth": 1,
       "extension": "GITIGNORE",
       "name": ".gitignore",
       "type": "text",
       "path": "codylandry/.gitignore",
       "iconColor": "#579242",
-      "contents": ".DS_Store\nnode_modules\n/dist\n/home-dir\n# local env files\n.env.local\n.env.*.local\n\n# Log files\nnpm-debug.log*\nyarn-debug.log*\nyarn-error.log*\n\n# Editor directories and files\n.idea\n.vscode\n*.suo\n*.ntvs*\n*.njsproj\n*.sln\n*.sw*\n"
+      "contents": ".DS_Store\nnode_modules\n/dist\n/home-dir\n# local env files\n.env.local\n.env.*.local\n\n# Log files\nnpm-debug.log*\nyarn-debug.log*\nyarn-error.log*\n\n# Editor directories and files\n.idea\n.vscode\n*.suo\n*.ntvs*\n*.njsproj\n*.sln\n*.sw*\n\n#amplify\namplify/\\#current-cloud-backend\namplify/.config/local-*\namplify/backend/amplify-meta.json\namplify/backend/awscloudformation\nbuild/\ndist/\nnode_modules/\naws-exports.js\nawsconfiguration.json"
     },
     {
-      "id": "X8dWSCaQSy",
+      "id": "JKYGodQrnd",
       "depth": 1,
       "extension": "MD",
       "name": "README.md",
@@ -27,7 +27,7 @@
       "contents": "# codylandry.com v0.0.1\n\n## Welcome!\n\nThanks for visiting my site!  You're looking at a best effort replica of the \nJetBrains IDE [Webstorm](https://www.jetbrains.com/webstorm/).  I love webstorm and\nhighly recommend you try it out.  \n\n## Why?\n\nThe idea to build an homage to Webstorm struck me while trying to decide what to do with my\nold personal webpage.  It was based on a bootstrap theme and, while it looked nice, it felt very\nboring and definitely didn't show off my capabilities.  Once the idea hit, I couldnt' stop thinking\nabout it.\n\n## Features\n\n- App implemented using:\n    - [Vue](https://vuejs.org/)\n    - [Vuex](https://vuex.vuejs.org/)\n    - [VueHooks](https://github.com/yyx990803/vue-hooks)\n    - A modified version of [jsTerm](https://github.com/clarkduvall/jsterm)\n    - [Vue-Draggable](https://github.com/SortableJS/Vue.Draggable)\n- Basic bash terminal where you can cd around, cat out files, etc.  \n- Project view, where you can see all the files for this very website.\n- Panes are resizable.\n- Layout state is persisted to local storage\n- File editing using [CodeMirror](https://codemirror.net/)\n\n## Roadmap\n\nThis is just the beginning.  I have a ton of plans to make this page even more amazing and fun.\n\n\n- markdown preview\n- ability to login via the terminal\n- ability to save your own files/folders\n- ability to 'pair program' with live cursors and a chat window\n- ability to run commands in the terminal that will send me an email\n- some easter eggs hidden in the pseudo-filesystem\n"
     },
     {
-      "id": "dki0kGGsbJ",
+      "id": "TGlMxfrzs1",
       "depth": 1,
       "extension": "JS",
       "name": "babel.config.js",
@@ -37,17 +37,17 @@
       "contents": "module.exports = {\n  presets: [\n    '@vue/app'\n  ]\n}\n"
     },
     {
-      "id": "SXbHQLQ41b",
+      "id": "nArEynGB7e",
       "depth": 1,
       "extension": "JS",
       "name": "build-fs.js",
       "type": "text",
       "path": "codylandry/build-fs.js",
       "iconColor": "#BD8E3E",
-      "contents": "const fs = require('fs')\nconst path = require('path')\n\nfunction makeid() {\n  var text = \"\";\n  var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\n\n  for (var i = 0; i < 10; i++)\n    text += possible.charAt(Math.floor(Math.random() * possible.length));\n\n  return text;\n}\n\nconst colorMap = {\n  STYL: '#538642',\n  JS: '#BD8E3E',\n  CSS: '#3E86A0',\n  HTML: '#579242',\n  MD: '#3E86A0'\n}\n\nconst ignored = [\n  'node_modules',\n  'dist',\n  'package-lock.json',\n  '.git',\n  '.idea',\n  '.DS_Store',\n  'file-system.json'\n]\n\nconst imageExtensions = [\n  'JPG',\n  'PNG'\n]\n\nconst buildFs = homeDir => {\n  const buildFsDir = (dir, fileList = [], depth = 1, projectPath = '') => {\n    fs.readdirSync(dir).forEach(file => {\n      const filePath = path.join(dir, file)\n      const id = makeid()\n      if (ignored.includes(file)) {\n        return\n      }\n\n      const newProjectPath = `${projectPath}/${file}`\n\n      if (fs.statSync(filePath).isDirectory()) {\n        fileList.push({\n          name: file,\n          type: 'dir',\n          id,\n          depth,\n          path: newProjectPath,\n          expanded: false,\n          contents: buildFsDir(filePath, [], depth + 1, newProjectPath),\n        })\n      } else {\n        const extension = file.substr(file.lastIndexOf('.') + 1).toUpperCase()\n\n        if (imageExtensions.includes(extension)) {\n          fileList.push({\n            id,\n            depth,\n            extension,\n            name: file,\n            type: 'img',\n            path: newProjectPath,\n            iconColor: colorMap[extension] || '#579242',\n            contents: '',\n          })\n          return\n        }\n\n        fileList.push({\n          id,\n          depth,\n          extension,\n          name: file,\n          type: 'text',\n          path: newProjectPath,\n          iconColor: colorMap[extension] || '#579242',\n          contents: fs.readFileSync(filePath).toString(),\n        })\n      }\n    })\n    return fileList\n  }\n\n  return {\n    id: makeid(),\n    name: 'codylandry',\n    type: 'dir',\n    expanded: true,\n    depth: 0,\n    path: 'codylandry',\n    contents: buildFsDir(homeDir, [], 1, 'codylandry')\n  }\n}\n\nif (process.argv.length) {\n  const [_, _cmd, directory] = process.argv\n\n  if (_cmd !== __filename) {\n    return\n  }\n\n  if (directory) {\n    console.log(JSON.stringify(buildFs(path.join(__dirname, directory)), null, 2))\n  }\n}\n"
+      "contents": "const fs = require('fs')\nconst path = require('path')\n\nfunction makeid() {\n  var text = \"\";\n  var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\n\n  for (var i = 0; i < 10; i++)\n    text += possible.charAt(Math.floor(Math.random() * possible.length));\n\n  return text;\n}\n\nconst colorMap = {\n  STYL: '#538642',\n  JS: '#BD8E3E',\n  CSS: '#3E86A0',\n  HTML: '#579242',\n  MD: '#3E86A0'\n}\n\nconst ignored = [\n  'node_modules',\n  'dist',\n  'package-lock.json',\n  '.git',\n  '.idea',\n  '.DS_Store',\n  'file-system.json',\n  'amplify'\n]\n\nconst imageExtensions = [\n  'JPG',\n  'PNG'\n]\n\nconst buildFs = homeDir => {\n  const buildFsDir = (dir, fileList = [], depth = 1, projectPath = '') => {\n    fs.readdirSync(dir).forEach(file => {\n      const filePath = path.join(dir, file)\n      const id = makeid()\n      if (ignored.includes(file)) {\n        return\n      }\n\n      const newProjectPath = `${projectPath}/${file}`\n\n      if (fs.statSync(filePath).isDirectory()) {\n        fileList.push({\n          name: file,\n          type: 'dir',\n          id,\n          depth,\n          path: newProjectPath,\n          expanded: false,\n          contents: buildFsDir(filePath, [], depth + 1, newProjectPath),\n        })\n      } else {\n        const extension = file.substr(file.lastIndexOf('.') + 1).toUpperCase()\n\n        if (imageExtensions.includes(extension)) {\n          fileList.push({\n            id,\n            depth,\n            extension,\n            name: file,\n            type: 'img',\n            path: newProjectPath,\n            iconColor: colorMap[extension] || '#579242',\n            contents: '',\n          })\n          return\n        }\n\n        fileList.push({\n          id,\n          depth,\n          extension,\n          name: file,\n          type: 'text',\n          path: newProjectPath,\n          iconColor: colorMap[extension] || '#579242',\n          contents: fs.readFileSync(filePath).toString(),\n        })\n      }\n    })\n    return fileList\n  }\n\n  return {\n    id: makeid(),\n    name: 'codylandry',\n    type: 'dir',\n    expanded: true,\n    depth: 0,\n    path: 'codylandry',\n    contents: buildFsDir(homeDir, [], 1, 'codylandry')\n  }\n}\n\nif (process.argv.length) {\n  const [_, _cmd, directory] = process.argv\n\n  if (_cmd !== __filename) {\n    return\n  }\n\n  if (directory) {\n    console.log(JSON.stringify(buildFs(path.join(__dirname, directory)), null, 2))\n  }\n}\n"
     },
     {
-      "id": "pj5aBgXR6V",
+      "id": "wYk4HuRMRo",
       "depth": 1,
       "extension": "JSON",
       "name": "package.json",
@@ -59,13 +59,13 @@
     {
       "name": "public",
       "type": "dir",
-      "id": "OTTlTGdpby",
+      "id": "Ym9yRPkpE1",
       "depth": 1,
       "path": "codylandry/public",
       "expanded": false,
       "contents": [
         {
-          "id": "LqqPXvK7Sa",
+          "id": "nnuABSQw9w",
           "depth": 2,
           "extension": "ICO",
           "name": "favicon.ico",
@@ -75,7 +75,7 @@
           "contents": "\u0000\u0000\u0001\u0000\u0001\u0000\u0010\u0010\u0000\u0000\u0001\u0000 \u0000h\u0004\u0000\u0000\u0016\u0000\u0000\u0000(\u0000\u0000\u0000\u0010\u0000\u0000\u0000 \u0000\u0000\u0000\u0001\u0000 \u0000\u0000\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0000��A%��A ��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\b��A���A���A\u0004��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0000��AP��A�AAC��A\u0000��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0014��A���A���A���A���A\r��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0000��Ao��A���A���A���A���A`��A\u0000��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A&��Aك�A��@��@���A���A΃�A\u001d��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0003��A���A���A�ls:�ny:���A���A���A���A\u0000��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0000��A>��A넺A�y�>�`N6�aQ6�z�>���A���AヸA2��A\u0000��A\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u000b��A���A���@�hf8�]G5�]G5�jl9���A���A���A���A\u0007��A\u0000\u0000\u0000\u0000\u0000��A\u0000��A\u0000��A[��A���A�t�<�^J5�^I5�^I5�_L5�v�=���A���A�AM��A\u0000��A\u0000��A\u0000��A\u0019��Aʃ�A�~�@�d[7�^H5�^J5�^J5�^H5�f`8���@���A���A���A\u0012��A\u0000��A\u0000��A{��A���A�o|;�^H5�^I5�_K5?_K5L^I5�^I5�q�;���A���A���Al��A\u0000��A(��Aȃ�A�|�?�bT6�^H5�^J5�aQ6\u0003`N6\u0007^J5�^H5�cX7�~�?烹AꃸA���A\u001e��A\u000e��A&��A&u�<&]G5&^I5&_J5\u000f^I5\u0000]G5\u0000_J5\u0011^I5'^I5&w�=&��A&��A&��A\f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000�\u0000\u0000�?\u0000\u0000�?\u0000\u0000�\u001f\u0000\u0000�\u001f\u0000\u0000�\u000f\u0000\u0000�\u000f\u0000\u0000�\u0007\u0000\u0000�\u0003\u0000\u0000�\u0003\u0000\u0000�\u0001\u0000\u0000�\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0001�\u0000\u0000��\u0000\u0000"
         },
         {
-          "id": "Vmg5oaBjjB",
+          "id": "XUOpp62HSm",
           "depth": 2,
           "extension": "HTML",
           "name": "index.html",
@@ -85,7 +85,7 @@
           "contents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n  <link rel=\"icon\" href=\"<%= BASE_URL %>favicon.ico\">\n  <link rel=\"stylesheet\" href=\"\">\n  <link rel=\"stylesheet\" href=\"./terminal.css\">\n  <script type=\"text/javascript\" src=\"./term.js\"></script>\n  <script type=\"text/javascript\" src=\"./jslinux.js\"></script>\n  <link rel=\"stylesheet\"\n        href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/darcula.min.css\">\n  <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.1/css/all.css\"\n        integrity=\"sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr\" crossorigin=\"anonymous\">\n  <title>codylandry</title>\n</head>\n<body>\n<noscript>\n  <strong>We're sorry but codylandry doesn't work properly without JavaScript enabled. Please enable it to\n    continue.</strong>\n</noscript>\n<div id=\"app\"></div>\n\n</body>\n\n</html>\n"
         },
         {
-          "id": "pNpi4LldEp",
+          "id": "7RW8937Rxy",
           "depth": 2,
           "extension": "CSS",
           "name": "terminal.css",
@@ -99,13 +99,13 @@
     {
       "name": "src",
       "type": "dir",
-      "id": "GboomjOzqw",
+      "id": "e0EBduV4uS",
       "depth": 1,
       "path": "codylandry/src",
       "expanded": false,
       "contents": [
         {
-          "id": "U4TJdozJyy",
+          "id": "WUzk3z58yW",
           "depth": 2,
           "extension": "VUE",
           "name": "App.vue",
@@ -117,13 +117,13 @@
         {
           "name": "assets",
           "type": "dir",
-          "id": "pubaF771Gu",
+          "id": "lSPVNilvlY",
           "depth": 2,
           "path": "codylandry/src/assets",
           "expanded": false,
           "contents": [
             {
-              "id": "RU0D1NKd0F",
+              "id": "WtgOCKUUy6",
               "depth": 3,
               "extension": "SVG",
               "name": "hidetabs.svg",
@@ -135,13 +135,13 @@
             {
               "name": "img",
               "type": "dir",
-              "id": "kR616vjdMy",
+              "id": "yhcPW47VI7",
               "depth": 3,
               "path": "codylandry/src/assets/img",
               "expanded": false,
               "contents": [
                 {
-                  "id": "WIx6tKbaNR",
+                  "id": "XXTevV3XoV",
                   "depth": 4,
                   "extension": "SVG",
                   "name": "arrow-down.svg",
@@ -151,7 +151,7 @@
                   "contents": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"rgb(187, 187, 187)\">\n    <path d=\"M24 22h-24l12-20z\" transform=\"rotate(180 12 12) translate(0 0)\"/>\n</svg>\n"
                 },
                 {
-                  "id": "AnMzKV87uh",
+                  "id": "mYpGh0RCFN",
                   "depth": 4,
                   "extension": "SVG",
                   "name": "arrow-right.svg",
@@ -161,7 +161,7 @@
                   "contents": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"rgb(187, 187, 187)\">\n    <path d=\"M24 22h-24l12-20z\" transform=\"rotate(90 12 12) translate(0 0)\"/>\n</svg>\n"
                 },
                 {
-                  "id": "mKNg7om8nu",
+                  "id": "RW2Ur4kjPz",
                   "depth": 4,
                   "extension": "JPG",
                   "name": "bkgd1.jpg",
@@ -171,7 +171,7 @@
                   "contents": ""
                 },
                 {
-                  "id": "gjUEHi1tWK",
+                  "id": "Ynn0SZ5NQF",
                   "depth": 4,
                   "extension": "SVG",
                   "name": "md-file-icon.svg",
@@ -181,7 +181,7 @@
                   "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg id=\"icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n     preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 640 640\" width=\"640\" height=\"640\">\n    <defs>\n        <path d=\"M289.52 0L589.25 0L589.25 339.2L50.75 339.2L50.75 240.72L289.52 240.72L289.52 240.72L289.52 0ZM264.12 0L264.12 207.9L50.75 207.9L50.75 207.9L264.12 0Z\"\n              id=\"coCMudhrv\"/>\n        <path d=\"M0 328.2L640 328.2L640 640.15L0 640.15L0 328.2Z\" id=\"b23RrDk77e\"/>\n        <text id=\"h1Z6LiF3y1\" x=\"167.83\" y=\"326.52\" font-size=\"272\" font-family=\"Roboto\" font-weight=\"normal\"\n              font-style=\"normal\" letter-spacing=\"0\" alignment-baseline=\"before-edge\"\n              transform=\"matrix(1 0 0 1 -174.26941123698907 -12.072714068954156)\" style=\"line-height:100%\"\n              xml:space=\"preserve\" dominant-baseline=\"text-before-edge\"><tspan x=\"167.83\" dy=\"0em\" alignment-baseline=\"before-edge\" dominant-baseline=\"text-before-edge\" text-anchor=\"start\">MD</tspan></text>\n        <style id=\"oxygenmononormalnormal\">\n            @font-face {\n            font-family: \"Roboto\";\n            font-weight: normal;\n            }\n        </style>\n    </defs>\n    <g>\n        <g>\n            <g>\n                <use xlink:href=\"#coCMudhrv\" opacity=\"1\" fill=\"#87939a\" fill-opacity=\"1\"></use>\n            </g>\n            <g>\n                <use xlink:href=\"#b23RrDk77e\" opacity=\"1\" fill=\"#3f93b0\" fill-opacity=\"1\"></use>\n            </g>\n            <g id=\"iNiYJpe1T\">\n                <use xlink:href=\"#h1Z6LiF3y1\" opacity=\"1\" fill=\"#3b3b3b\" fill-opacity=\"1\"></use>\n            </g>\n        </g>\n    </g>\n</svg>\n"
                 },
                 {
-                  "id": "jZchgXyJgo",
+                  "id": "jXWY5r0OXf",
                   "depth": 4,
                   "extension": "SVG",
                   "name": "sass-file-icon.svg",
@@ -191,7 +191,7 @@
                   "contents": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg id=\"icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n     preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 640 640\" width=\"640\" height=\"640\">\n    <defs>\n        <path d=\"M289.52 0L589.25 0L589.25 339.2L50.75 339.2L50.75 240.72L289.52 240.72L289.52 240.72L289.52 0ZM264.12 0L264.12 207.9L50.75 207.9L50.75 207.9L264.12 0Z\"\n              id=\"coCMudhrv\"></path>\n        <path d=\"M0 328.2L640 328.2L640 640.15L0 640.15L0 328.2Z\" id=\"b23RrDk77e\"></path>\n        <text id=\"h1Z6LiF3y1\" x=\"167.83\" y=\"326.52\" font-size=\"272\" font-family=\"Roboto\" font-weight=\"normal\"\n              font-style=\"normal\" letter-spacing=\"0\" alignment-baseline=\"before-edge\"\n              transform=\"matrix(1 0 0 1 -174.26941123698907 -12.072714068954156)\" style=\"line-height:100%\"\n              xml:space=\"preserve\" dominant-baseline=\"text-before-edge\"><tspan x=\"167.83\" dy=\"0em\" alignment-baseline=\"before-edge\" dominant-baseline=\"text-before-edge\" text-anchor=\"start\">SASS</tspan></text>\n        <style id=\"oxygenmononormalnormal\">\n            @font-face {\n            font-family: \"Roboto\";\n            font-weight: normal;\n            }\n        </style>\n    </defs>\n    <g>\n        <g>\n            <g>\n                <use xlink:href=\"#coCMudhrv\" opacity=\"1\" fill=\"#87939a\" fill-opacity=\"1\"></use>\n            </g>\n            <g>\n                <use xlink:href=\"#b23RrDk77e\" opacity=\"1\" fill=\"#af536e\" fill-opacity=\"1\"></use>\n            </g>\n            <g id=\"iNiYJpe1T\">\n                <use xlink:href=\"#h1Z6LiF3y1\" opacity=\"1\" fill=\"#3b3b3b\" fill-opacity=\"1\"></use>\n            </g>\n        </g>\n    </g>\n</svg>\n"
                 },
                 {
-                  "id": "C1yX4ZIwE6",
+                  "id": "NEeHMwsIYN",
                   "depth": 4,
                   "extension": "PNG",
                   "name": "vue-icon.png",
@@ -203,7 +203,7 @@
               ]
             },
             {
-              "id": "QLZH1BNew0",
+              "id": "wl4qd5GHWJ",
               "depth": 3,
               "extension": "PNG",
               "name": "logo.png",
@@ -215,15 +215,25 @@
           ]
         },
         {
+          "id": "FZBtgAvKA0",
+          "depth": 2,
+          "extension": "JS",
+          "name": "aws-exports.js",
+          "type": "text",
+          "path": "codylandry/src/aws-exports.js",
+          "iconColor": "#BD8E3E",
+          "contents": "// WARNING: DO NOT EDIT. This file is automatically generated by AWS Amplify. It will be overwritten.\n\nconst awsmobile = {\n    \"aws_project_region\": \"us-east-1\",\n    \"aws_content_delivery_bucket\": \"codylandry-20190216224613-hostingbucket-dev\",\n    \"aws_content_delivery_bucket_region\": \"us-east-1\",\n    \"aws_content_delivery_url\": \"https://d3em5y1wp3qugm.cloudfront.net\"\n};\n\n\nexport default awsmobile;\n"
+        },
+        {
           "name": "components",
           "type": "dir",
-          "id": "TNmdhu55zN",
+          "id": "dvnudDNLKz",
           "depth": 2,
           "path": "codylandry/src/components",
           "expanded": false,
           "contents": [
             {
-              "id": "Js2EBVDLjk",
+              "id": "RjY4oWGyUs",
               "depth": 3,
               "extension": "VUE",
               "name": "file-icon.vue",
@@ -233,7 +243,7 @@
               "contents": "<template>\n  <img v-if=\"extension === 'VUE'\" src=\"../assets/img/vue-icon.png\"></img>\n  <svg v-else version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n       preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 640 640\" width=\"640\" height=\"640\">\n    <defs>\n      <path d=\"M289.52 0L589.25 0L589.25 339.2L50.75 339.2L50.75 240.72L289.52 240.72L289.52 240.72L289.52 0ZM264.12 0L264.12 207.9L50.75 207.9L50.75 207.9L264.12 0Z\"\n            :id=\"id1\"></path>\n      <path d=\"M0 328.2L640 328.2L640 640.15L0 640.15L0 328.2Z\" :id=\"id2\"></path>\n      <text :id=\"id3\" x=\"167.83\" y=\"326.52\" font-size=\"272\" font-family=\"Roboto\" font-weight=\"normal\"\n            font-style=\"normal\" letter-spacing=\"0\" alignment-baseline=\"before-edge\"\n            transform=\"matrix(1 0 0 1 -174.26941123698907 -12.072714068954156)\" style=\"line-height:100%\"\n            xml:space=\"preserve\" dominant-baseline=\"text-before-edge\"><tspan x=\"167.83\" dy=\"0em\" alignment-baseline=\"before-edge\" dominant-baseline=\"text-before-edge\" text-anchor=\"start\">{{ extension }}</tspan></text>\n\n    </defs>\n    <g>\n      <g>\n        <g>\n          <use :xlink:href=\"`#${id1}`\" opacity=\"1\" fill=\"#87939a\" fill-opacity=\"1\"></use>\n        </g>\n        <g>\n          <use :xlink:href=\"`#${id2}`\" opacity=\"1\" :fill=\"color\" fill-opacity=\"1\"></use>\n        </g>\n        <g>\n          <use :xlink:href=\"`#${id3}`\" opacity=\"1\" fill=\"#3b3b3b\" fill-opacity=\"1\"></use>\n        </g>\n      </g>\n    </g>\n  </svg>\n</template>\n\n\n\n<script>\n  function makeid() {\n    let text = \"\";\n    const possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\n\n    for (var i = 0; i < 10; i++)\n      text += possible.charAt(Math.floor(Math.random() * possible.length));\n\n    return text;\n  }\n  export default {\n    props: {\n      color: {\n        type: String,\n      },\n      extension: {\n        type: String,\n        required: true\n      }\n    },\n    data () {\n      return {\n        id1: makeid(),\n        id2: makeid(),\n        id3: makeid()\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n  svg\n    cursor: default\n</style>\n"
             },
             {
-              "id": "XH5CThLhBa",
+              "id": "ysISaKDdAH",
               "depth": 3,
               "extension": "VUE",
               "name": "file-tree-item.vue",
@@ -245,13 +255,13 @@
             {
               "name": "layout",
               "type": "dir",
-              "id": "pyNVEOAl94",
+              "id": "zn314IhB0s",
               "depth": 3,
               "path": "codylandry/src/components/layout",
               "expanded": false,
               "contents": [
                 {
-                  "id": "PnswnNE7yy",
+                  "id": "vZ2amNiKgo",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "bottom-bar-tabs.vue",
@@ -261,7 +271,7 @@
                   "contents": "<template>\n  <div class=\"bottom-bar-tabs\">\n    <div class=\"bottom-bar__tab\">\n      <i class=\"fab fa-docker\" style=\"color: #0FAADB\"></i>\n      <span class=\"bottom-bar__tab__label\">Docker</span>\n    </div>\n    <div class=\"bottom-bar__tab bottom-bar__tab--active\">\n      <i class=\"fas fa-terminal\"></i>\n      <span class=\"bottom-bar__tab__label\">Terminal</span>\n    </div>\n    <div class=\"bottom-bar__tab\">\n      <i class=\"fas fa-play\"></i>\n      <span class=\"bottom-bar__tab__label\">Run</span>\n    </div>\n    <div class=\"bottom-bar__tab\">\n      <i class=\"fas fa-list-ul\"></i>\n      <span class=\"bottom-bar__tab__label\">TODO</span>\n    </div>\n    <div class=\"bottom-bar__tab bottom-bar__tab--right\">\n      <i class=\"far fa-comment fa-flip-horizontal\"></i>\n      <span class=\"bottom-bar__tab__label\">Event Log</span>\n    </div>\n  </div>\n</template>\n\n<script>\n  export default {\n    components: {\n\n    }\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n  @import \"~@/stylus/variables\"\n  .bottom-bar-tabs\n    background $grey\n    border-top 1px solid $lightborder\n    padding 0 25px\n    display flex\n    align-items center\n    color $lightgrey\n\n  .bottom-bar__tab\n    display flex\n    align-items center\n    color $lightgrey\n    padding 0 10px\n    height 100%\n    font-size 12px\n\n    &__label\n      padding-left 6px\n\n    &--active\n      background $darkgrey\n\n    &--right\n      margin-left auto\n</style>\n"
                 },
                 {
-                  "id": "nobVfzZ4zW",
+                  "id": "VhqRprwNJJ",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "bottom-bar.vue",
@@ -271,7 +281,7 @@
                   "contents": "<template>\n  <div class=\"bottom-bar\">\n    <terminal/>\n  </div>\n</template>\n\n<script>\n  import useMakeResizeable from '@/hooks/make-resizeable'\n  import store from '@/store'\n  import Terminal from '@/components/terminal'\n\n  export default {\n    components: {\n      Terminal\n    },\n    hooks () {\n      useMakeResizeable({\n        selector: '.bottom-bar',\n        edge: 'top',\n        defaultheight: 100,\n        onResize: (newHeight) => {\n          store.commit('UPDATE_BOTTOM_BAR_HEIGHT', newHeight)\n          store.commit('SET_ALLOW_TEXT_SELECT', true)\n        },\n        onDone: () => {\n          store.commit('SET_ALLOW_TEXT_SELECT', false)\n        }\n      })\n    }\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n  .bottom-bar\n    background $darkgrey\n</style>\n"
                 },
                 {
-                  "id": "lNHgbQhPYF",
+                  "id": "512WdcLlz9",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "context-bar.vue",
@@ -281,17 +291,17 @@
                   "contents": "<template>\n  <div class=\"context-bar\">\n    <!--<i class=\"fa fa-box context-bar__hide-tabs\"></i>-->\n    <img class=\"context-bar__hide-tabs\" src=\"../../assets/hidetabs.svg\">\n    <span class=\"context-bar__text\">\n      <span>6:13</span>\n      <span>\n        <span>LF</span>\n        <span class=\"fa-stack\">\n          <i class=\"fa fa-sort-up fa-stack-1x\"></i>\n          <i class=\"fa fa-sort-down fa-stack-1x\"></i>\n        </span>\n      </span>\n      <span>\n        <span>UTF-8</span>\n        <span class=\"fa-stack\">\n          <i class=\"fa fa-sort-up fa-stack-1x\"></i>\n          <i class=\"fa fa-sort-down fa-stack-1x\"></i>\n        </span>\n      </span>\n      <span>\n        <span>2 spaces</span>\n        <span class=\"fa-stack\">\n          <i class=\"fa fa-sort-up fa-stack-1x\"></i>\n          <i class=\"fa fa-sort-down fa-stack-1x\"></i>\n        </span>\n      </span>\n      <i class=\"fa fa-lock-open\"></i>\n      <i class=\"fas fa-user-secret\"></i>\n      <i class=\"fas fa-cogs\"></i>\n    </span>\n  </div>\n</template>\n\n<style lang=\"stylus\" scoped>\n  @import \"~@/stylus/variables\"\n  .context-bar\n    display flex\n    justify-content space-between\n    align-items center\n    background $grey\n    border-top 1px solid $lightborder\n\n    .fa-stack\n      width 1em\n      font-size 9px\n      padding-left 2px\n\n    &__hide-tabs\n      width: 15px;\n      margin-left: 5px;\n\n    &__text\n      font-size: 11px;\n      color: #B9B9B9;\n      font-weight: 400;\n      padding-right 3px\n\n      & > *\n        padding 0 3px\n</style>\n"
                 },
                 {
-                  "id": "1D4DoU9v7j",
+                  "id": "KmuBO2HzCo",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "editor.vue",
                   "type": "text",
                   "path": "codylandry/src/components/layout/editor.vue",
                   "iconColor": "#579242",
-                  "contents": "<template>\n  <div class=\"editor\" @keydown.stop @keypress.stop>\n    <div class=\"tab-bar\">\n      <draggable v-model=\"openFiles\" class=\"tabs\">\n        <panel-tab v-for=\"(file, $index) in openFiles\"\n                   class=\"editor-tab\"\n                   :active=\"activeFile.id === file.id\"\n                   :key=\"$index\"\n                   :name=\"file.name\"\n                   @close=\"closeFile(file)\"\n                   :color=\"file.iconColor\"\n                   @click.native=\"openFile(file)\"\n                   :extension=\"file.extension\"/>\n      </draggable>\n    </div>\n    <div style=\"height: 100%\" ref=\"files\" :key=\"activeFile.id\">\n    </div>\n  </div>\n</template>\n\n<script>\n  import Draggable from 'vuedraggable'\n  import PanelTab from '@/components/panel-tab'\n  import CodeMirror from 'codemirror'\n  import 'codemirror/lib/codemirror.css'\n  import 'codemirror/addon/fold/foldgutter.js'\n  import 'codemirror/addon/fold/comment-fold'\n  import 'codemirror/addon/fold/foldcode'\n  import 'codemirror/addon/fold/brace-fold'\n  import 'codemirror/addon/fold/indent-fold'\n  import 'codemirror/addon/fold/markdown-fold'\n  import 'codemirror/addon/fold/foldgutter.css'\n  import 'codemirror/mode/javascript/javascript'\n  import 'codemirror/mode/xml/xml'\n  import 'codemirror/mode/css/css'\n  import 'codemirror/mode/vue/vue'\n  import 'codemirror/mode/htmlmixed/htmlmixed'\n  import 'codemirror/mode/stylus/stylus'\n  import 'codemirror/mode/python/python'\n  import 'codemirror/mode/markdown/markdown'\n\n  export default {\n    components: {PanelTab, Draggable},\n    computed: {\n      openFiles: {\n        get () {\n          return this.$store.state.openFiles\n        },\n        set (val) {\n          this.$store.commit('SET_OPEN_FILES', val)\n        }\n      },\n      activeFile () {\n        return this.$store.state.activeFile\n      },\n      highlightWatches () {\n        return {...this.openFiles, ...this.activeFile}\n      }\n    },\n    watch: {\n      highlightWatches: {\n        immediate: true,\n        deep: true,\n        handler () {\n          this.highlight()\n        }\n      }\n    },\n    methods: {\n      async highlight () {\n        await this.$nextTick()\n        if (this.$refs.files && this.activeFile.id) {\n          // hljs.highlightBlock(this.$refs.files)\n          // hljs.lineNumbersBlock(this.$refs.files)\n          const modeMap = {\n            VUE: 'vue',\n            HTML: 'htmlmixed',\n            JS: 'javascript',\n            STYL: 'css',\n            CSS: 'css',\n            SVG: 'xml',\n            JSON: 'javascript',\n            MD: 'markdown'\n          }\n\n          var myCodeMirror = CodeMirror(this.$refs.files, {\n            value: this.activeFile.contents,\n            mode: {name: modeMap[this.activeFile.extension], json: true},\n            theme: 'darcula',\n            lineNumbers: true,\n            foldGutter: true,\n            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']\n          })\n        }\n      },\n      openFile (file) {\n        this.$store.commit('SET_ACTIVE_FILE', file)\n      },\n      closeFile (file) {\n        this.$store.commit('CLOSE_FILE', file)\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n\n  .editor\n    background: $darkgrey\n\n  .tab-bar\n    background: $grey\n    border: 1px solid $lightborder\n    border-left: none\n    border-right: none\n    overflow: hidden\n\n    .tabs\n      display: flex\n      justify-content: flex-start\n      align-items: stretch\n      height: 100%\n      overflow: scroll;\n      margin-bottom: -17px;\n      padding-bottom: 17px;\n\n</style>\n"
+                  "contents": "<template>\n  <div class=\"editor\" @keydown.stop @keypress.stop>\n    <div class=\"tab-bar\">\n      <draggable v-model=\"openFiles\" class=\"tabs\">\n        <panel-tab v-for=\"(file, $index) in openFiles\"\n                   class=\"editor-tab\"\n                   :active=\"activeFile.id === file.id\"\n                   :key=\"$index\"\n                   :name=\"file.name\"\n                   @close=\"closeFile(file)\"\n                   :color=\"file.iconColor\"\n                   @click.native=\"openFile(file)\"\n                   :extension=\"file.extension\"/>\n      </draggable>\n    </div>\n    <div style=\"height: 100%; position: relative;\" ref=\"files\" :key=\"activeFile.id\">\n      <div v-if=\"!activeFile.id && !openFiles.length\" class=\"no-files\">\n        <div><span class=\"no-files__txt\">Search Everywhere</span><span class=\"no-files__key\">Double ↑</span></div>\n        <div><span class=\"no-files__txt\">Go to File</span><span class=\"no-files__key\">⇧⌘O</span></div>\n        <div><span class=\"no-files__txt\">Recent Files</span><span class=\"no-files__key\">⌘E</span></div>\n        <div><span class=\"no-files__txt\">Navigation Bar</span><span class=\"no-files__key\">⌘↑</span></div>\n        <div><span class=\"no-files__txt\">Drop Files Here to Open</span></div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\n  import Draggable from 'vuedraggable'\n  import PanelTab from '@/components/panel-tab'\n  import CodeMirror from 'codemirror'\n  import 'codemirror/lib/codemirror.css'\n  import 'codemirror/addon/fold/foldgutter.js'\n  import 'codemirror/addon/fold/comment-fold'\n  import 'codemirror/addon/fold/foldcode'\n  import 'codemirror/addon/fold/brace-fold'\n  import 'codemirror/addon/fold/indent-fold'\n  import 'codemirror/addon/fold/markdown-fold'\n  import 'codemirror/addon/fold/foldgutter.css'\n  import 'codemirror/mode/javascript/javascript'\n  import 'codemirror/mode/xml/xml'\n  import 'codemirror/mode/css/css'\n  import 'codemirror/mode/vue/vue'\n  import 'codemirror/mode/htmlmixed/htmlmixed'\n  import 'codemirror/mode/stylus/stylus'\n  import 'codemirror/mode/python/python'\n  import 'codemirror/mode/markdown/markdown'\n\n  export default {\n    components: {PanelTab, Draggable},\n    computed: {\n      openFiles: {\n        get () {\n          return this.$store.state.openFiles\n        },\n        set (val) {\n          this.$store.commit('SET_OPEN_FILES', val)\n        }\n      },\n      activeFile () {\n        return this.$store.state.activeFile\n      },\n      openFiles () {\n        return this.$store.state.openFiles\n      },\n      highlightWatches () {\n        return {...this.openFiles, ...this.activeFile}\n      }\n    },\n    watch: {\n      highlightWatches: {\n        immediate: true,\n        deep: true,\n        handler () {\n          this.highlight()\n        }\n      }\n    },\n    methods: {\n      async highlight () {\n        await this.$nextTick()\n        if (this.$refs.files && this.activeFile.id) {\n          const modeMap = {\n            VUE: 'vue',\n            HTML: 'htmlmixed',\n            JS: 'javascript',\n            STYL: 'css',\n            CSS: 'css',\n            SVG: 'xml',\n            JSON: 'javascript',\n            MD: 'markdown'\n          }\n\n          var myCodeMirror = CodeMirror(this.$refs.files, {\n            value: this.activeFile.contents,\n            mode: {name: modeMap[this.activeFile.extension], json: true},\n            theme: 'darcula',\n            lineNumbers: true,\n            foldGutter: true,\n            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']\n          })\n        }\n      },\n      openFile (file) {\n        this.$store.commit('SET_ACTIVE_FILE', file)\n      },\n      closeFile (file) {\n        this.$store.commit('CLOSE_FILE', file)\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n\n  .editor\n    background: $darkgrey\n\n    .no-files\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      color: white;\n      transform: translate(-50%, -50%);\n\n      &__txt\n        color #8f8f8f\n\n      &__key\n        color #589DF6\n        margin-left 20px\n\n  .tab-bar\n    background: $grey\n    border: 1px solid $lightborder\n    border-left: none\n    border-right: none\n    overflow: hidden\n\n    .tabs\n      display: flex\n      justify-content: flex-start\n      align-items: stretch\n      height: 100%\n      overflow: scroll;\n      margin-bottom: -17px;\n      padding-bottom: 17px;\n\n</style>\n"
                 },
                 {
-                  "id": "oBuZvSsIXh",
+                  "id": "UbwpM4ymu7",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "left-sidebar.vue",
@@ -301,7 +311,7 @@
                   "contents": "<template>\n  <div class=\"left-sidebar\">\n    <project-view/>\n  </div>\n</template>\n\n<script>\n  import ProjectView from '@/components/project-view'\n  import useMakeResizeable from '@/hooks/make-resizeable'\n  import store from '@/store'\n  export default {\n    components: {\n      ProjectView\n    },\n    hooks () {\n      useMakeResizeable({\n        selector: '.left-sidebar',\n        edge: 'right',\n        defaultwidth: 225,\n        onResize: (newWidth) => {\n          store.commit('UPDATE_LEFT_SIDEBAR_WIDTH', newWidth)\n          store.commit('SET_ALLOW_TEXT_SELECT', true)\n        },\n        onDone: () => {\n          store.commit('SET_ALLOW_TEXT_SELECT', false)\n        }\n      })\n    },\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n  @import \"~@/stylus/variables\"\n  .left-sidebar\n    background $grey\n    overflow: auto;\n    width: 100%;\n</style>\n"
                 },
                 {
-                  "id": "R6LjZESerZ",
+                  "id": "SBn2BjXpnS",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "left-tab-bar.vue",
@@ -311,7 +321,7 @@
                   "contents": "<template>\n  <div class=\"left-tab-bar__wrapper\">\n    <div class=\"left-tab-bar\">\n      <panel-tab class=\"bar-tab\" name=\"1:Project\" :show-close=\"false\" :active=\"projectViewVisible\" @click.native=\"toggleProjectView\">\n        <template slot=\"icon\"><i class=\"fa fa-folder\"></i></template>\n      </panel-tab>\n    </div>\n  </div>\n</template>\n\n<script>\n  import PanelTab from '../panel-tab'\n  export default {\n    components: {PanelTab},\n    computed: {\n      projectViewVisible () {\n        return this.$store.state.layout.leftSidebar.visible\n      }\n    },\n    methods: {\n      toggleProjectView () {\n        this.$store.commit('SET_LEFT_SIDEBAR_VISIBILITY', !this.$store.state.layout.leftSidebar.visible)\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n  .left-tab-bar\n    position: absolute;\n    top: 0;\n    right: 0;\n    transform-origin: bottom right;\n    transform: translateY(-22px) rotate(-90deg);\n\n    &__wrapper\n      position relative\n      border-right 1px solid $lightborder\n\n    .fa.fa-folder\n      transform: rotate(90deg) translateX(2px);\n</style>\n"
                 },
                 {
-                  "id": "CcsjgQrK6B",
+                  "id": "cAEm5JPfTD",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "path-bar.vue",
@@ -321,7 +331,7 @@
                   "contents": "<template>\n  <div class=\"path-bar\">\n    <template v-for=\"part in pathFolders\">\n      <i class=\"fa fa-folder\"></i>\n      <span>{{part}}</span>\n      <i class=\"fas fa-chevron-right\"></i>\n    </template>\n    <file-icon style=\"height: 16px; width: 16px;\" :extension=\"activeFile.extension\" :color=\"activeFile.iconColor\"></file-icon>\n    <span>{{ activeFile.name }}</span>\n  </div>\n</template>\n\n<script>\n  import FileIcon from '../file-icon'\n  export default {\n    name: 'path-bar',\n    components: {FileIcon},\n    computed: {\n      activeFile () {\n        return this.$store.state.activeFile\n      },\n      path () {\n        return this.activeFile.path.split('/')\n      },\n      pathFolders () {\n        return this.path.slice(0, this.path.length - 1)\n      }\n    },\n    methods: {\n\n    }\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n@import \"~@/stylus/variables\"\n.path-bar\n  display flex\n  align-items center\n  color $lightgrey\n  font-weight 300\n  letter-spacing 0.4px\n  font-size 12px\n  height 25px\n  padding-left 7px\n  border-top 1px solid $lightborder\n\n  & > span:first-of-type\n    font-weight 700\n\n  & > *\n    padding-left 3px\n\n  .fa.fa-folder\n    color #87939a\n    font-size 15px\n\n  .fas.fa-chevron-right\n    color $lightgrey\n</style>\n"
                 },
                 {
-                  "id": "gDnivKVcLs",
+                  "id": "UrAJ4KNWug",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "right-sidebar.vue",
@@ -331,7 +341,7 @@
                   "contents": "<template>\n  <div class=\"right-sidebar\">\n\n  </div>\n</template>\n\n<script>\n  import useMakeResizeable from '@/hooks/make-resizeable'\n  import store from '@/store'\n  export default {\n    hooks () {\n      useMakeResizeable({\n        selector: '.right-sidebar',\n        edge: 'left',\n        defaultwidth: 225,\n        onResize: (newWidth) => {\n          store.commit('UPDATE_RIGHT_SIDEBAR_WIDTH', newWidth)\n          store.commit('SET_ALLOW_TEXT_SELECT', true)\n        },\n        onDone: () => {\n          store.commit('SET_ALLOW_TEXT_SELECT', false)\n        }\n      })\n    },\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n  @import \"~@/stylus/variables\"\n  .right-sidebar\n    background $grey\n</style>\n"
                 },
                 {
-                  "id": "S8U9iKk2mL",
+                  "id": "kSl1mQUTvp",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "right-tab-bar.vue",
@@ -341,7 +351,7 @@
                   "contents": "<template>\n  <div class=\"right-tab-bar__wrapper\">\n    <div class=\"right-tab-bar\">\n      <panel-tab class=\"bar-tab\" name=\"Database\" :active=\"databaseViewVisible\" :show-close=\"false\" @click.native=\"toggleProjectView\">\n        <template slot=\"icon\">\n          <i class=\"fas fa-database\"></i>\n        </template>\n      </panel-tab>\n    </div>\n  </div>\n</template>\n\n<script>\n  import PanelTab from '../panel-tab'\n  export default {\n    components: {PanelTab},\n    computed: {\n      databaseViewVisible () {\n        return this.$store.state.layout.rightSidebar.visible\n      }\n    },\n    methods: {\n      toggleProjectView () {\n        this.$store.commit('SET_RIGHT_SIDEBAR_VISIBILITY', !this.$store.state.layout.rightSidebar.visible)\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n  .right-tab-bar\n    position: absolute;\n    top: 0;\n    left: 0;\n    transform-origin: bottom left;\n    transform: translateY(-22px) rotate(90deg);\n\n    &__wrapper\n      position relative\n      border-left 1px solid $lightborder\n\n    .fas.fa-database\n      transform: rotate(-90deg) translateX(-2px);\n\n</style>\n"
                 },
                 {
-                  "id": "m8rUuwDY9P",
+                  "id": "PO7f27aDp1",
                   "depth": 4,
                   "extension": "VUE",
                   "name": "tool-bar.vue",
@@ -353,7 +363,7 @@
               ]
             },
             {
-              "id": "upSlWnrBpY",
+              "id": "GEGY5G2I0l",
               "depth": 3,
               "extension": "VUE",
               "name": "panel-tab.vue",
@@ -363,7 +373,7 @@
               "contents": "<template>\n  <div class=\"tab\" :class=\"classes\">\n    <slot name=\"icon\">\n      <file-icon class=\"tab__icon\" style=\"height: 14px; width: 14px\" :color=\"color\" :extension=\"extension\"/>\n    </slot>\n    <span class=\"tab__name\">{{ name }}</span>\n    <i v-if=\"showClose\" @click.stop=\"$emit('close')\" class=\"fa fa-times tab__close\"></i>\n  </div>\n</template>\n\n<script>\n  import FileIcon from './file-icon'\n  export default {\n    components: {\n      FileIcon\n    },\n    props: {\n      name: {\n        type: String,\n        required: true\n      },\n      color: {\n        type: String\n      },\n      extension: {\n        type: String\n      },\n      active: {\n        type: Boolean\n      },\n      showClose: {\n        type: Boolean,\n        'default': true\n      }\n    },\n    computed: {\n      classes () {\n        return [\n          this.active ? 'tab--selected' : '',\n        ]\n      }\n    }\n  }\n</script>\n\n<style lang=\"stylus\" scoped>\n  @import \"~@/stylus/variables\"\n  .tab\n    display: flex\n    user-select none\n    align-items: center\n    justify-content: space-around\n    color: $lightgrey\n    font-weight: 400\n    font-size: 13px\n    letter-spacing: 0.4px\n    padding: 3px 8px\n    white-space nowrap\n\n    &__icon\n      display none\n\n    &__close\n      display none\n\n    &__name\n      padding-left 5px\n      font-size: 11px\n      position: relative\n      top: 2px\n\n    &.bar-tab\n      border-bottom: 3px solid transparent\n      padding 3px 10px\n\n      ^[0].tab--selected\n        background rgba(0, 0, 0, 0.30)\n\n\n      .tab__close\n        display block\n        font-size: 11px\n        margin-left: 5px\n        color: #5e696e\n        position: relative\n        top: 1px\n\n    &.editor-tab\n      border-right: 1px solid $lightborder\n\n      &.tab--selected\n        background: rgb(80, 86, 88)\n        border-bottom: 3px solid $blue\n\n      &.tab:not(.tab--selected)\n        border-bottom: 3px solid transparent\n\n      .tab__icon\n        display block\n        margin-right: 5px\n\n      .tab__close\n        display block\n        font-size: 11px\n        margin-left: 5px\n        color: #5e696e\n        position: relative\n        top: 1px\n\n      .tab__name\n        padding-left 5px\n        font-size: 11px\n        position: relative\n        top: 2px\n</style>\n"
             },
             {
-              "id": "6cd1lWyj1f",
+              "id": "pY8wWK8zrP",
               "depth": 3,
               "extension": "VUE",
               "name": "project-view.vue",
@@ -373,7 +383,7 @@
               "contents": "<template>\n  <div class=\"project-view\">\n    <div class=\"file-opts\">\n      <div class=\"tabs\">\n        <div class=\"tab\"></div>\n      </div>\n    </div>\n    <div class=\"file-tree\">\n      <file-tree-item\n          :key=\"fileSystem.id\"\n          :item=\"fileSystem\"\n      ></file-tree-item>\n    </div>\n  </div>\n</template>\n\n<script>\n  import FileTreeItem from './file-tree-item'\n  import useMakeResizeable from '../hooks/make-resizeable'\n  import store from '../store'\n\n  export default {\n    components: {FileTreeItem},\n    computed: {\n      fileSystem () {\n        return this.$store.state.fileSystem\n      }\n    },\n    methods: {\n      itemContents (item) {\n        return Array.isArray(item.contents)\n          ? item.contents\n          : []\n      },\n      filterLinks (contents) {\n        return contents.filter(item => !item.name.startsWith('.'))\n      }\n    },\n    hooks () {\n      useMakeResizeable({\n        selector: '.file-tree',\n        edge: 'right',\n        defaultwidth: 225,\n        onResize: (newWidth) => {\n          store.commit('UPDATE_LEFT_SIDEBAR_WIDTH', newWidth)\n          store.commit('SET_ALLOW_TEXT_SELECT', true)\n        },\n        onDone: () => {\n          store.commit('SET_ALLOW_TEXT_SELECT', false)\n        }\n      })\n    },\n  }\n</script>\n\n<style lang=\"stylus\">\n  @import \"~@/stylus/variables\"\n\n  .project-view\n    max-height 100%\n\n  .file-opts\n    background: $grey\n    border: 1px solid $darkborder\n\n  .file-tree\n    padding: 2px\n    overflow: visible\n    font-weight: 400\n    font-size: 13px\n    letter-spacing: 0.4px\n    background $grey\n    position: relative\n    height: 100%\n\n    &__handle\n      position: absolute;\n      height: 100%;\n      right: 0;\n      top: 0;\n      width: 4px;\n      cursor ew-resize\n</style>\n"
             },
             {
-              "id": "EbyKrOanRP",
+              "id": "x1Fs0PmCrs",
               "depth": 3,
               "extension": "VUE",
               "name": "terminal.vue",
@@ -387,13 +397,13 @@
         {
           "name": "hooks",
           "type": "dir",
-          "id": "c3RsEQ7yNQ",
+          "id": "E8f3gTqdJj",
           "depth": 2,
           "path": "codylandry/src/hooks",
           "expanded": false,
           "contents": [
             {
-              "id": "wfBOHLWInq",
+              "id": "KSbKe03jRe",
               "depth": 3,
               "extension": "JS",
               "name": "make-resizeable.js",
@@ -407,13 +417,13 @@
         {
           "name": "lib",
           "type": "dir",
-          "id": "ojQllRf9DJ",
+          "id": "mTPSQ582pj",
           "depth": 2,
           "path": "codylandry/src/lib",
           "expanded": false,
           "contents": [
             {
-              "id": "WKevcfb6in",
+              "id": "F9ZgGH11h1",
               "depth": 3,
               "extension": "JS",
               "name": "commands.js",
@@ -423,7 +433,7 @@
               "contents": "// Copyright 2013 Clark DuVall\n//\n// Licensed under the Apache License, Version 2.0 (the \"License\");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//     http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an \"AS IS\" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\nexport const commands = {\n  cat (argv, cb) {\n    var filenames = this._terminal.parseArgs(argv).filenames\n    var stdout\n\n    this._terminal.scroll()\n    if (!filenames.length) {\n      this._terminal.returnHandler = function () {\n        stdout = this.stdout()\n        if (!stdout)\n          return\n        stdout.innerHTML += '<br>' + stdout.innerHTML + '<br>'\n        this.scroll()\n        this.newStdout()\n      }.bind(this._terminal)\n      return\n    }\n    filenames.forEach(function (filename, i) {\n      var entry = this._terminal.getEntry(filename)\n\n      if (!entry)\n        this._terminal.write('cat: ' + filename + ': No such file or directory')\n      else if (entry.type === 'dir')\n        this._terminal.write('cat: ' + filename + ': Is a directory.')\n      else\n        this._terminal.write(entry.contents)\n      if (i !== filenames.length - 1)\n        this._terminal.write('<br>')\n    }, this)\n    cb()\n  },\n\n  cd (argv, cb) {\n    var filename = this._terminal.parseArgs(argv).filenames[0],\n      entry\n\n    if (!filename)\n      filename = '~'\n    entry = this._terminal.getEntry(filename)\n    if (!entry)\n      this._terminal.write('bash: cd: ' + filename + ': No such file or directory')\n    else if (entry.type !== 'dir')\n      this._terminal.write('bash: cd: ' + filename + ': Not a directory.')\n    else\n      this._terminal.cwd = entry\n    cb()\n  },\n\n  ls (argv, cb) {\n    var result = this._terminal.parseArgs(argv),\n      args = result.args,\n      filename = result.filenames[0],\n      entry = filename ? this._terminal.getEntry(filename) : this._terminal.cwd,\n      maxLen = 0,\n      writeEntry\n\n    writeEntry = function (e, str) {\n      this.writeLink(e, str)\n      if (args.indexOf('l') > -1) {\n        if ('description' in e)\n          this.write(' - ' + e.description)\n        this.write('<br>')\n      } else {\n        // Make all entries the same width like real ls. End with a normal\n        // space so the line breaks only after entries.\n        this.write(Array(maxLen - e.name.length + 2).join('&nbsp') + ' ')\n      }\n    }.bind(this._terminal)\n\n    if (!entry)\n      this._terminal.write('ls: cannot access ' + filename + ': No such file or directory')\n    else if (entry.type === 'dir') {\n      var dirStr = this._terminal.dirString(entry)\n      maxLen = entry.contents.reduce(function (prev, cur) {\n        return Math.max(prev, cur.name.length)\n      }, 0)\n\n      for (var i in entry.contents) {\n        var e = entry.contents[i]\n        if (args.indexOf('a') > -1 || e.name[0] !== '.')\n          writeEntry(e, dirStr + '/' + e.name)\n      }\n    } else {\n      maxLen = entry.name.length\n      writeEntry(entry, filename)\n    }\n    cb()\n  },\n\n  gimp (argv, cb) {\n    var filename = this._terminal.parseArgs(argv).filenames[0],\n      entry,\n      imgs\n\n    if (!filename) {\n      this._terminal.write('gimp: please specify an image file.')\n      cb()\n      return\n    }\n\n    entry = this._terminal.getEntry(filename)\n    if (!entry || entry.type !== 'img') {\n      this._terminal.write('gimp: file ' + filename + ' is not an image file.')\n    } else {\n      this._terminal.write('<img src=\"' + entry.contents + '\"/>')\n      imgs = this._terminal.div.getElementsByTagName('img')\n      imgs[imgs.length - 1].onload = function () {\n        this.scroll()\n      }.bind(this._terminal)\n      if ('caption' in entry)\n        this._terminal.write('<br/>' + entry.caption)\n    }\n    cb()\n  },\n\n  clear (argv, cb) {\n    this._terminal.div.innerHTML = ''\n    cb()\n  },\n\n  sudo (argv, cb) {\n    var count = 0\n    this._terminal.returnHandler = function () {\n      if (++count < 3) {\n        this.write('<br/>Sorry, try again.<br/>')\n        this.write('[sudo] password for ' + this.config.username + ': ')\n        this.scroll()\n      } else {\n        this.write('<br/>sudo: 3 incorrect password attempts')\n        cb()\n      }\n    }.bind(this._terminal)\n    this._terminal.write('[sudo] password for ' + this._terminal.config.username + ': ')\n    this._terminal.scroll()\n  },\n\n  login (argv, cb) {\n    this._terminal.returnHandler = function () {\n      var username = this.stdout().innerHTML\n\n      this.scroll()\n      if (username)\n        this.config.username = username\n      this.write('<br>Password: ')\n      this.scroll()\n      this.returnHandler = function () { cb() }\n    }.bind(this._terminal)\n    this._terminal.write('Username: ')\n    this._terminal.newStdout()\n    this._terminal.scroll()\n  },\n\n  tree (argv, cb) {\n    var term = this._terminal,\n      home\n\n    function writeTree (dir, level) {\n      dir.contents.forEach(function (entry) {\n        var str = ''\n\n        if (entry.name.startsWith('.'))\n          return\n        for (var i = 0; i < level; i++)\n          str += '|  '\n        str += '|&mdash;&mdash;'\n        term.write(str)\n        term.writeLink(entry, term.dirString(dir) + '/' + entry.name)\n        term.write('<br>')\n        if (entry.type === 'dir')\n          writeTree(entry, level + 1)\n      })\n    }\n\n    home = this._terminal.getEntry('~')\n    this._terminal.writeLink(home, '~')\n    this._terminal.write('<br>')\n    writeTree(home, 0)\n    cb()\n  },\n\n  help (argv, cb) {\n    this._terminal.write(\n      'You can navigate either by clicking on anything that ' +\n      '<a href=\"javascript:void(0)\">underlines</a> when you put your mouse ' +\n      'over it, or by typing commands in the terminal. Type the name of a ' +\n      '<span class=\"exec\">link</span> to view it. Use \"cd\" to change into a ' +\n      '<span class=\"dir\">directory</span>, or use \"ls\" to list the contents ' +\n      'of that directory. The contents of a <span class=\"text\">file</span> ' +\n      'can be viewed using \"cat\". <span class=\"img\">Images</span> are ' +\n      'displayed using \"gimp\".<br><br>If there is a command you want to get ' +\n      'out of, press Ctrl+C or Ctrl+D.<br><br>')\n    this._terminal.write('Commands are:<br>')\n    for (var c in Object.keys(this._terminal.commands)) {\n      if (this._terminal.commands.hasOwnProperty(c) && !c.startsWith('_'))\n        this._terminal.write(c + '  ')\n    }\n    cb()\n  }\n}\n"
             },
             {
-              "id": "Xs4ps3Y8nT",
+              "id": "YGrwGIbmB6",
               "depth": 3,
               "extension": "JS",
               "name": "jsterm.js",
@@ -435,7 +445,7 @@
           ]
         },
         {
-          "id": "av0mZnhiqr",
+          "id": "WrJZP3WkH9",
           "depth": 2,
           "extension": "JS",
           "name": "main.js",
@@ -445,7 +455,7 @@
           "contents": "import Vue from 'vue'\nimport App from './App.vue'\nimport store from './store'\nimport { hooks } from 'vue-hooks'\nimport './stylus/main.styl'\n\nVue.config.productionTip = false\n\nVue.use(hooks)\n\nnew Vue({\n  store,\n  render: h => h(App)\n}).$mount('#app')\n"
         },
         {
-          "id": "xTRUo9lOSe",
+          "id": "JLaliBBga8",
           "depth": 2,
           "extension": "JS",
           "name": "store.js",
@@ -457,13 +467,13 @@
         {
           "name": "stylus",
           "type": "dir",
-          "id": "c54M30zjnf",
+          "id": "3dnAjTrOuL",
           "depth": 2,
           "path": "codylandry/src/stylus",
           "expanded": false,
           "contents": [
             {
-              "id": "NsBsBil6Yr",
+              "id": "z7FkDuQPTw",
               "depth": 3,
               "extension": "CSS",
               "name": "darcula.css",
@@ -473,7 +483,7 @@
               "contents": "/**\n    Name: IntelliJ IDEA darcula theme\n    From IntelliJ IDEA by JetBrains\n */\n\n.cm-s-darcula  { font-family: \"Fira Code\", Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif;}\n.cm-s-darcula.CodeMirror { background: #2B2B2B; color: #A9B7C6; }\n\n.cm-s-darcula span.cm-meta { color: #BBB529; }\n.cm-s-darcula span.cm-number { color: #6897BB; }\n.cm-s-darcula span.cm-keyword { color: #CC7832; line-height: 1em; font-weight: bold; }\n.cm-s-darcula span.cm-def { color: #a5b3c1; font-style: italic; }\n.cm-s-darcula span.cm-variable { color: #A9B7C6; }\n.cm-s-darcula span.cm-variable-2 { color: #9876aa; }\n.cm-s-darcula span.cm-variable-3 { color: #9876AA; }\n.cm-s-darcula span.cm-type { color: #AABBCC; font-weight: bold; }\n.cm-s-darcula span.cm-property { color: #bababa; }\n.cm-s-darcula span.cm-operator { color: #A9B7C6; }\n.cm-s-darcula span.cm-string { color: #a4c160; }\n.cm-s-darcula span.cm-string-2 { color: #6A8759; }\n.cm-s-darcula span.cm-comment { color: #61A151; font-style: italic; }\n.cm-s-darcula span.cm-link { color: #CC7832; }\n.cm-s-darcula span.cm-atom { color: #a0bc5e; }\n.cm-s-darcula span.cm-error { color: #BC3F3C; }\n.cm-s-darcula span.cm-tag { color: #e1b967; }\n.cm-s-darcula span.cm-attribute { color: #bababa; }\n.cm-s-darcula span.cm-qualifier { color: #dbb565; }\n.cm-s-darcula span.cm-bracket { color: #e5b322; }\n.cm-s-darcula span.cm-builtin { color: #d1ad62; }\n.cm-s-darcula span.cm-special { color: #FF9E59; }\n\n.cm-s-darcula .CodeMirror-cursor { border-left: 1px solid #A9B7C6; }\n.cm-s-darcula .CodeMirror-activeline-background { background: #323232; }\n.cm-s-darcula .CodeMirror-gutters { background: #313335; border-right: 1px solid #313335; }\n.cm-s-darcula .CodeMirror-guttermarker { color: #FFEE80; }\n.cm-s-darcula .CodeMirror-guttermarker-subtle { color: #D0D0D0; }\n.cm-s-darcula .CodeMirrir-linenumber { color: #606366; }\n.cm-s-darcula .CodeMirror-matchingbracket { background-color: #3B514D; color: #FFEF28 !important; font-weight: bold; }\n\n.cm-s-darcula div.CodeMirror-selected { background: #214283; }\n\n.CodeMirror-hints.darcula {\n  font-family: \"Fira Code\", Monaco, Consolas, 'Courier New', monospace;\n  color: #9C9E9E;\n  background-color: #3B3E3F !important;\n}\n\n.CodeMirror-hints.darcula .CodeMirror-hint-active {\n  background-color: #494D4E !important;\n  color: #9C9E9E !important;\n}\n\n\n.CodeMirror {\n  height: 100%;\n}\n\n.CodeMirror * {\n  font-family: \"Fira Code\", monospace;\n  font-size: 12px;\n}\n"
             },
             {
-              "id": "shKbs1iCZm",
+              "id": "klJ6D9oNRb",
               "depth": 3,
               "extension": "STYL",
               "name": "fonts.styl",
@@ -483,7 +493,7 @@
               "contents": "@import url(\"https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900\")\n@import url(\"https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css\")\n*\n  font-family: \"Roboto\", sans-serif\n.hljs *\n  font-feature-settings: \"calt\" 1\n  font-family: \"Fira Code\", monospace\n  font-weight: 300\n  font-size: 14px\n"
             },
             {
-              "id": "Arq2UpRIch",
+              "id": "QAeOKxVC6p",
               "depth": 3,
               "extension": "CSS",
               "name": "js-term.css",
@@ -493,7 +503,7 @@
               "contents": "\n.jsterm a {\n   color: #E0E0E0;\n   text-decoration: none;\n}\n\n.jsterm a:hover {\n   text-decoration: underline;\n}\n\ndiv.jsterm {\n   background: black;\n   font-family: monospace;\n   font-size: 16px;\n   color: #E0E0E0;\n   width: 900px;\n   margin-bottom: 20px;\n   white-space: pre-wrap;\n}\n\ndiv.jsterm .host, div.jsterm .host a {\n   color: #5555ff;\n   font-weight: bold;\n}\n\ndiv.jsterm .user, div.jsterm .user a {\n   color: #ff5555;\n   font-weight: bold;\n}\n\ndiv.jsterm .cwd, div.jsterm .cwd a {\n   color: #ffff55;\n   font-weight: bold;\n}\n\ndiv.jsterm .dir, div.jsterm .dir a {\n   color: #5555ff;\n   font-weight: bold;\n}\n\ndiv.jsterm .link, div.jsterm .link a {\n   color: #5555ff;\n   font-weight: bold;\n}\n\ndiv.jsterm .exec, div.jsterm .exec a {\n   color: #55ff55;\n   font-weight: bold;\n}\n\ndiv.jsterm .img, div.jsterm .img a {\n   color: #ff55ff;\n   font-weight: bold;\n}\n\n#blinker {\n    line-height: .9em;\n}\n"
             },
             {
-              "id": "YxpgF75QMg",
+              "id": "JYNAVS9Nfx",
               "depth": 3,
               "extension": "STYL",
               "name": "main.styl",
@@ -503,7 +513,7 @@
               "contents": "@import \"normalize.css\"\n@import \"darcula.css\"\n@import \"variables.styl\"\n@import \"fonts.styl\"\n"
             },
             {
-              "id": "q0tgG7Lta8",
+              "id": "d4XRvzp3qj",
               "depth": 3,
               "extension": "CSS",
               "name": "normalize.css",
@@ -513,7 +523,7 @@
               "contents": "/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */\n\n/* Document\n   ========================================================================== */\n\n/**\n * 1. Correct the line height in all browsers.\n * 2. Prevent adjustments of font size after orientation changes in iOS.\n */\n\nhtml {\n  line-height: 1.15; /* 1 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n}\n\nul,\nol {\n  padding: 0;\n  margin: 0;\n  list-style: none;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n/* Sections\n   ========================================================================== */\n\n/**\n * Remove the margin in all browsers.\n */\n\nbody {\n  margin: 0;\n  position: relative;\n  overflow: hidden;\n}\n\n/**\n * Render the `main` element consistently in IE.\n */\n\nmain {\n  display: block;\n}\n\n/**\n * Correct the font size and margin on `h1` elements within `section` and\n * `article` contexts in Chrome, Firefox, and Safari.\n */\n\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\n/* Grouping content\n   ========================================================================== */\n\n/**\n * 1. Add the correct box sizing in Firefox.\n * 2. Show the overflow in Edge and IE.\n */\n\nhr {\n  box-sizing: content-box; /* 1 */\n  height: 0; /* 1 */\n  overflow: visible; /* 2 */\n}\n\n/**\n * 1. Correct the inheritance and scaling of font size in all browsers.\n * 2. Correct the odd `em` font sizing in all browsers.\n */\n\npre {\n  font-family: monospace, monospace; /* 1 */\n  font-size: 1em; /* 2 */\n}\n\n/* Text-level semantics\n   ========================================================================== */\n\n/**\n * Remove the gray background on active links in IE 10.\n */\n\na {\n  background-color: transparent;\n}\n\n/**\n * 1. Remove the bottom border in Chrome 57-\n * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.\n */\n\nabbr[title] {\n  border-bottom: none; /* 1 */\n  text-decoration: underline; /* 2 */\n  text-decoration: underline dotted; /* 2 */\n}\n\n/**\n * Add the correct font weight in Chrome, Edge, and Safari.\n */\n\nb,\nstrong {\n  font-weight: bolder;\n}\n\n/**\n * 1. Correct the inheritance and scaling of font size in all browsers.\n * 2. Correct the odd `em` font sizing in all browsers.\n */\n\ncode,\nkbd,\nsamp {\n  font-family: monospace, monospace; /* 1 */\n  font-size: 1em; /* 2 */\n}\n\n/**\n * Add the correct font size in all browsers.\n */\n\nsmall {\n  font-size: 80%;\n}\n\n/**\n * Prevent `sub` and `sup` elements from affecting the line height in\n * all browsers.\n */\n\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\nsup {\n  top: -0.5em;\n}\n\n/* Embedded content\n   ========================================================================== */\n\n/**\n * Remove the border on images inside links in IE 10.\n */\n\nimg {\n  border-style: none;\n}\n\n/* Forms\n   ========================================================================== */\n\n/**\n * 1. Change the font styles in all browsers.\n * 2. Remove the margin in Firefox and Safari.\n */\n\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font-family: inherit; /* 1 */\n  font-size: 100%; /* 1 */\n  line-height: 1.15; /* 1 */\n  margin: 0; /* 2 */\n}\n\n/**\n * Show the overflow in IE.\n * 1. Show the overflow in Edge.\n */\n\nbutton,\ninput { /* 1 */\n  overflow: visible;\n}\n\n/**\n * Remove the inheritance of text transform in Edge, Firefox, and IE.\n * 1. Remove the inheritance of text transform in Firefox.\n */\n\nbutton,\nselect { /* 1 */\n  text-transform: none;\n}\n\n/**\n * Correct the inability to style clickable types in iOS and Safari.\n */\n\nbutton,\n[type=\"button\"],\n[type=\"reset\"],\n[type=\"submit\"] {\n  -webkit-appearance: button;\n}\n\n/**\n * Remove the inner border and padding in Firefox.\n */\n\nbutton::-moz-focus-inner,\n[type=\"button\"]::-moz-focus-inner,\n[type=\"reset\"]::-moz-focus-inner,\n[type=\"submit\"]::-moz-focus-inner {\n  border-style: none;\n  padding: 0;\n}\n\n/**\n * Restore the focus styles unset by the previous rule.\n */\n\nbutton:-moz-focusring,\n[type=\"button\"]:-moz-focusring,\n[type=\"reset\"]:-moz-focusring,\n[type=\"submit\"]:-moz-focusring {\n  outline: 1px dotted ButtonText;\n}\n\n/**\n * Correct the padding in Firefox.\n */\n\nfieldset {\n  padding: 0.35em 0.75em 0.625em;\n}\n\n/**\n * 1. Correct the text wrapping in Edge and IE.\n * 2. Correct the color inheritance from `fieldset` elements in IE.\n * 3. Remove the padding so developers are not caught out when they zero out\n *    `fieldset` elements in all browsers.\n */\n\nlegend {\n  box-sizing: border-box; /* 1 */\n  color: inherit; /* 2 */\n  display: table; /* 1 */\n  max-width: 100%; /* 1 */\n  padding: 0; /* 3 */\n  white-space: normal; /* 1 */\n}\n\n/**\n * Add the correct vertical alignment in Chrome, Firefox, and Opera.\n */\n\nprogress {\n  vertical-align: baseline;\n}\n\n/**\n * Remove the default vertical scrollbar in IE 10+.\n */\n\ntextarea {\n  overflow: auto;\n}\n\n/**\n * 1. Add the correct box sizing in IE 10.\n * 2. Remove the padding in IE 10.\n */\n\n[type=\"checkbox\"],\n[type=\"radio\"] {\n  box-sizing: border-box; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Correct the cursor style of increment and decrement buttons in Chrome.\n */\n\n[type=\"number\"]::-webkit-inner-spin-button,\n[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/**\n * 1. Correct the odd appearance in Chrome and Safari.\n * 2. Correct the outline style in Safari.\n */\n\n[type=\"search\"] {\n  -webkit-appearance: textfield; /* 1 */\n  outline-offset: -2px; /* 2 */\n}\n\n/**\n * Remove the inner padding in Chrome and Safari on macOS.\n */\n\n[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/**\n * 1. Correct the inability to style clickable types in iOS and Safari.\n * 2. Change font properties to `inherit` in Safari.\n */\n\n::-webkit-file-upload-button {\n  -webkit-appearance: button; /* 1 */\n  font: inherit; /* 2 */\n}\n\n/* Interactive\n   ========================================================================== */\n\n/*\n * Add the correct display in Edge, IE 10+, and Firefox.\n */\n\ndetails {\n  display: block;\n}\n\n/*\n * Add the correct display in all browsers.\n */\n\nsummary {\n  display: list-item;\n}\n\n/* Misc\n   ========================================================================== */\n\n/**\n * Add the correct display in IE 10+.\n */\n\ntemplate {\n  display: none;\n}\n\n/**\n * Add the correct display in IE 10.\n */\n\n[hidden] {\n  display: none;\n}\n"
             },
             {
-              "id": "3juzbudhuB",
+              "id": "F6iF9VOvj6",
               "depth": 3,
               "extension": "STYL",
               "name": "variables.styl",
@@ -527,7 +537,7 @@
       ]
     },
     {
-      "id": "QdU0DiIJtC",
+      "id": "vKWeHFzkAR",
       "depth": 1,
       "extension": "JS",
       "name": "vue.config.js",
