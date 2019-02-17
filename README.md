@@ -23,6 +23,8 @@ about it.
     - [Vue-Draggable](https://github.com/SortableJS/Vue.Draggable)
 - Basic bash terminal where you can cd around, cat out files, etc.  
 - Project view, where you can see all the files for this very website.
+- Panes are resizable.
+- Layout state is persisted to local storage
 - File editing using [CodeMirror](https://codemirror.net/)
 
 ## Roadmap
