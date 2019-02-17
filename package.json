@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "prebuild": "node build-fs.js . > src/file-system.json",
+    "build-fs": "node build-fs.js . > src/file-system.json",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
