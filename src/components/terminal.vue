@@ -3,8 +3,11 @@
     <div class="tabs">
       <span style="margin-right: 10px">Terminal:</span>
       <panel-tab class="bar-tab" name="Local" extension="" color="blue" active @click.native="toggleProjectView"></panel-tab>
+      <div class="icon-wrapper"><i class="fas fa-plus"></i></div>
     </div>
-    <div id="js-terminal"></div>
+    <div class="js-terminal__wrapper">
+      <div id="js-terminal"></div>
+    </div>
   </div>
 </template>
 
@@ -35,26 +38,40 @@
 
 <style lang="stylus">
   @import "~@/stylus/variables"
+  .js-terminal__wrapper
+    overflow auto
+
   .terminal
     background $darkgrey
     color $lightgrey
     max-height 100%
-    overflow auto
     font-weight 300
     font-size 13px
+    display: flex;
+    flex-direction: column;
 
     .tabs
       background $blue-tab-bar
-      /*position absolute*/
-      /*top 0*/
-      /*left 0*/
       width 100%
+      min-height 25px
       height 25px
       display flex
       align-items center
       padding 0 10px
       font-weight 400
       border 1px solid $darkborder
+
+      .icon-wrapper
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        padding: 3px 0;
+        border-radius: 4px;
+        margin-left 10px
+
+        &:hover
+          background #52585b
 
   #js-terminal *
     font-family: "Fira Code", monospace

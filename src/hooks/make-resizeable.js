@@ -11,7 +11,7 @@ export default function makeResizeable (opts) {
   const {
     selector,
     edge,
-    barThickness = 4
+    barThickness = 6
   } = opts
   const edges = {
     top: 'height',

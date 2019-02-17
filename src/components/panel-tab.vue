@@ -4,7 +4,7 @@
       <file-icon class="tab__icon" style="height: 14px; width: 14px" :color="color" :extension="extension"/>
     </slot>
     <span class="tab__name">{{ name }}</span>
-    <i @click.stop="$emit('close')" class="fa fa-times tab__close"></i>
+    <i v-if="showClose" @click.stop="$emit('close')" class="fa fa-times tab__close"></i>
   </div>
 </template>
 
@@ -27,6 +27,10 @@
       },
       active: {
         type: Boolean
+      },
+      showClose: {
+        type: Boolean,
+        'default': true
       }
     },
     computed: {
@@ -66,9 +70,12 @@
       top: 2px
 
     &.bar-tab
-      background rgba(0, 0, 0, 0.30)
       border-bottom: 3px solid transparent
       padding 3px 10px
+
+      ^[0].tab--selected
+        background rgba(0, 0, 0, 0.30)
+
 
       .tab__close
         display block

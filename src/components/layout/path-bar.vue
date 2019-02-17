@@ -20,10 +20,7 @@
         return this.$store.state.activeFile
       },
       path () {
-        const projectStart = this.$store.state.fileSystem.name
-        const activeFilePath = this.activeFile.path
-        const projectPath = activeFilePath.substr(activeFilePath.indexOf(projectStart))
-        return projectPath.split('/')
+        return this.activeFile.path.split('/')
       },
       pathFolders () {
         return this.path.slice(0, this.path.length - 1)
