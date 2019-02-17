@@ -58,4 +58,5 @@
 .CodeMirror * {
   font-family: "Fira Code", monospace;
   font-size: 12px;
+  line-height: 14px;
 }
