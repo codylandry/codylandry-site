@@ -124,6 +124,9 @@
       color: white;
       transform: translate(-50%, -50%);
 
+      & > div:not(:last-of-type)
+        padding-bottom 20px
+
       &__txt
         color #8f8f8f
 
