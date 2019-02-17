@@ -7,9 +7,8 @@
     </div>
     <div class="file-tree">
       <file-tree-item
-          v-for="item in filterLinks(fileSystem.contents)"
-          :key="item.name"
-          :item="item"
+          :key="fileSystem.id"
+          :item="fileSystem"
       ></file-tree-item>
     </div>
   </div>

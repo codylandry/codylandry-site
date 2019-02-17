@@ -1,17 +1,22 @@
 <template>
   <div class="terminal">
     <div class="tabs">
-      <span>Terminal:</span>
+      <span style="margin-right: 10px">Terminal:</span>
+      <panel-tab class="bar-tab" name="Local" extension="" color="blue" active @click.native="toggleProjectView"></panel-tab>
     </div>
     <div id="js-terminal"></div>
   </div>
 </template>
 
 <script>
+  import PanelTab from './panel-tab'
   import { Terminal } from '@/lib/jsterm'
   import { commands } from '@/lib/commands'
 
   export default {
+    components: {
+      PanelTab
+    },
     async mounted () {
       await this.$nextTick()
       const prompt = (cwd) => `<span class="user">cody</span>@<span class="host">codylandry.com</span>:<span class="cwd">${cwd}</span>$ `
@@ -39,7 +44,7 @@
     font-size 13px
 
     .tabs
-      background $grey
+      background $blue-tab-bar
       /*position absolute*/
       /*top 0*/
       /*left 0*/

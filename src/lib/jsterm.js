@@ -35,7 +35,7 @@ export class Terminal {
     this.div.classList.add('jsterm')
     this.container.appendChild(this.div)
 
-    this.container.onkeydown = (e) => {
+    window.onkeydown = (e) => {
       var key = (e.which) ? e.which : e.keyCode
 
       if (key == 8 || key == 9 || key == 13 || key == 46 || key == 38 || key == 40 || e.ctrlKey) {
@@ -44,7 +44,7 @@ export class Terminal {
       this._handleSpecialKey(key, e)
     }
 
-    this.container.onkeypress = (e) => {
+    window.onkeypress = (e) => {
       this._typeKey((e.which) ? e.which : e.keyCode)
     }
 

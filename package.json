@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "postbuild": "node build-fs.js home-dir > src/file-system.json",
+    "prebuild": "node build-fs.js . > src/file-system.json",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "stylus-loader": "^3.0.2",
     "vue": "^2.5.22",
     "vue-hooks": "^0.3.2",
+    "vuedraggable": "^2.17.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

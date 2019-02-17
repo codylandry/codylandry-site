@@ -1,9 +1,7 @@
 <template>
   <div class="right-tab-bar__wrapper">
     <div class="right-tab-bar">
-      <panel-tab name="Database" extension="" color="blue" active @click.native="toggleProjectView">
-        <template slot="icon"> </template>
-      </panel-tab>
+      <panel-tab class="bar-tab" name="Database" extension="" color="blue" active @click.native="toggleProjectView"></panel-tab>
     </div>
   </div>
 </template>

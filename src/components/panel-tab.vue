@@ -1,10 +1,10 @@
 <template>
-  <div class="tab" :class="active ? 'tab--selected' : ''">
+  <div class="tab" :class="classes">
     <slot name="icon">
-      <file-icon v-if="showIcon" style="height: 14px; width: 14px" :color="color" :extension="extension"/>
+      <file-icon class="tab__icon" style="height: 14px; width: 14px" :color="color" :extension="extension"/>
     </slot>
     <span class="tab__name">{{ name }}</span>
-    <i v-if="showClose" @click.stop="$emit('close')" class="fa fa-times tab__close"></i>
+    <i @click.stop="$emit('close')" class="fa fa-times tab__close"></i>
   </div>
 </template>
 
@@ -27,14 +27,13 @@
       },
       active: {
         type: Boolean
-      },
-      showIcon: {
-        type: Boolean,
-        'default': true
-      },
-      showClose: {
-        type: Boolean,
-        'default': true
+      }
+    },
+    computed: {
+      classes () {
+        return [
+          this.active ? 'tab--selected' : '',
+        ]
       }
     }
   }
@@ -52,29 +51,58 @@
     font-size: 13px
     letter-spacing: 0.4px
     padding: 3px 8px
-    border-right: 1px solid $lightborder
     white-space nowrap
 
-    &--selected
-      background: rgb(80, 86, 88)
-      border-bottom: 3px solid $blue
-
-    &:not(&--selected)
-      border-bottom: 3px solid transparent
-
     &__icon
-      margin-right: 5px
+      display none
 
     &__close
-      font-size: 11px
-      margin-left: 5px
-      color: #5e696e
-      position: relative
-      top: 1px
+      display none
 
     &__name
       padding-left 5px
       font-size: 11px
       position: relative
       top: 2px
+
+    &.bar-tab
+      background rgba(0, 0, 0, 0.30)
+      border-bottom: 3px solid transparent
+      padding 3px 10px
+
+      .tab__close
+        display block
+        font-size: 11px
+        margin-left: 5px
+        color: #5e696e
+        position: relative
+        top: 1px
+
+    &.editor-tab
+      border-right: 1px solid $lightborder
+
+      &.tab--selected
+        background: rgb(80, 86, 88)
+        border-bottom: 3px solid $blue
+
+      &.tab:not(.tab--selected)
+        border-bottom: 3px solid transparent
+
+      .tab__icon
+        display block
+        margin-right: 5px
+
+      .tab__close
+        display block
+        font-size: 11px
+        margin-left: 5px
+        color: #5e696e
+        position: relative
+        top: 1px
+
+      .tab__name
+        padding-left 5px
+        font-size: 11px
+        position: relative
+        top: 2px
 </style>

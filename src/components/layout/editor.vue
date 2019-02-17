@@ -1,8 +1,9 @@
 <template>
-  <div class="editor">
+  <div class="editor" @keydown.stop @keypress.stop>
     <div class="tab-bar">
-      <div class="tabs">
+      <draggable v-model="openFiles" class="tabs">
         <panel-tab v-for="(file, $index) in openFiles"
+                   class="editor-tab"
                    :active="activeFile.id === file.id"
                    :key="$index"
                    :name="file.name"
@@ -10,7 +11,7 @@
                    :color="file.iconColor"
                    @click.native="openFile(file)"
                    :extension="file.extension"/>
-      </div>
+      </draggable>
     </div>
     <div style="height: 100%" ref="files" :key="activeFile.id">
     </div>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+  import Draggable from 'vuedraggable'
   import PanelTab from '@/components/panel-tab'
   import CodeMirror from 'codemirror'
   import 'codemirror/lib/codemirror.css'
@@ -38,10 +40,15 @@
   import 'codemirror/mode/markdown/markdown'
 
   export default {
-    components: {PanelTab},
+    components: {PanelTab, Draggable},
     computed: {
-      openFiles () {
-        return this.$store.state.openFiles
+      openFiles: {
+        get () {
+          return this.$store.state.openFiles
+        },
+        set (val) {
+          this.$store.commit('SET_OPEN_FILES', val)
+        }
       },
       activeFile () {
         return this.$store.state.activeFile
@@ -62,7 +69,7 @@
     methods: {
       async highlight () {
         await this.$nextTick()
-        if (this.$refs.files) {
+        if (this.$refs.files && this.activeFile.id) {
           // hljs.highlightBlock(this.$refs.files)
           // hljs.lineNumbersBlock(this.$refs.files)
           const modeMap = {

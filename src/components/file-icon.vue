@@ -1,5 +1,6 @@
 <template>
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  <img v-if="extension === 'VUE'" src="../assets/img/vue-icon.png"></img>
+  <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
        preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="640" height="640">
     <defs>
       <path d="M289.52 0L589.25 0L589.25 339.2L50.75 339.2L50.75 240.72L289.52 240.72L289.52 240.72L289.52 0ZM264.12 0L264.12 207.9L50.75 207.9L50.75 207.9L264.12 0Z"
@@ -43,7 +44,6 @@
     props: {
       color: {
         type: String,
-        required: true
       },
       extension: {
         type: String,

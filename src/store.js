@@ -16,15 +16,16 @@ const localStoragePlugin = store => {
   store.subscribe(writeToLocalStorage)
 }
 
-const initialActiveFile = {
-  'id': 'XsIMleextZ',
-  'depth': 3,
-  'extension': 'MD',
-  'name': 'README.md',
-  'type': 'text',
-  'iconColor': '#3E86A0',
-  'contents': '# Cody Landry\n------------------\n\n\nSoftware Engineer\nInmar Inc.\n'
+function getFileByPath (path) {
+  let [_, ...pathArray] = path.split('/')
+  let next = fileSystem
+  for (const segment of pathArray) {
+    next = next.contents.find(f => f.name === segment)
+  }
+  return next
 }
+
+const initialActiveFile = getFileByPath('~/README.md')
 
 const initialState = {
   fileSystem,
@@ -51,6 +52,11 @@ function getState () {
   const localStorageState = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (localStorageState) {
     const localStorageState_ = flatted.parse(localStorageState)
+
+    if (localStorageState_.fileSystem.id !== fileSystem.id) {
+      return initialState
+    }
+
     return localStorageState_
   }
   return initialState
@@ -95,8 +101,11 @@ export default new Vuex.Store({
       Vue.delete(state.openFiles, idx)
 
       if (file.id === state.activeFile.id) {
-        Vue.set(state, 'activeFile', state.openFiles[idx - 1] || null)
+        Vue.set(state, 'activeFile', state.openFiles[idx - 1] || {})
       }
+    },
+    SET_OPEN_FILES (state, files) {
+      Vue.set(state, 'openFiles', [...files])
     },
     TOGGLE_FOLDER (state, folder) {
       Vue.set(folder, 'expanded', !folder.expanded)

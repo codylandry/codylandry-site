@@ -4,6 +4,8 @@
        :class="classes"
        :style="appStyle">
     <editor class="app__editor"/>
+    <tool-bar class="app__tool-bar"/>
+    <path-bar class="app__path-bar"/>
     <left-sidebar class="app__left-sidebar"/>
     <right-sidebar class="app__right-sidebar"/>
     <bottom-bar class="app__bottom-bar"/>
@@ -15,6 +17,8 @@
 </template>
 
 <script>
+import ToolBar from '@/components/layout/tool-bar'
+import PathBar from '@/components/layout/path-bar'
 import LeftTabBar from '@/components/layout/left-tab-bar'
 import RightTabBar from '@/components/layout/right-tab-bar'
 import Editor from '@/components/layout/editor'
@@ -35,6 +39,8 @@ export default {
     BottomBarTabs,
     LeftTabBar,
     RightTabBar,
+    PathBar,
+    ToolBar,
   },
   computed: {
     appGridTemplateColumns () {
@@ -52,8 +58,8 @@ export default {
     },
     appGridTemplateAreas () {
       return `
-        ".                .                 .                 .                     ."
-        ".                .                 .                 .                     ."
+        "tool-bar         tool-bar          tool-bar          tool-bar              tool-bar"
+        "path-bar         path-bar          path-bar          path-bar              path-bar"
         "left-tab-bar     left-sidebar      editor            right-sidebar         right-tab-bar"
         "left-tab-bar     bottom-bar        bottom-bar        bottom-bar            right-tab-bar"
         "bottom-bar-tabs  bottom-bar-tabs   bottom-bar-tabs   bottom-bar-tabs       bottom-bar-tabs"
@@ -120,6 +126,11 @@ export default {
   &__right-tab-bar
     grid-area right-tab-bar
 
+  &__path-bar
+    grid-area path-bar
+
+  &__tool-bar
+    grid-area tool-bar
 
 
 </style>

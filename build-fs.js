@@ -19,11 +19,31 @@ const colorMap = {
   MD: '#3E86A0'
 }
 
+const ignored = [
+  'node_modules',
+  'dist',
+  'package-lock.json',
+  '.git',
+  '.idea',
+  '.DS_Store',
+  'file-system.json'
+]
+
+const imageExtensions = [
+  'JPG',
+  'PNG'
+]
+
 const buildFs = homeDir => {
-  const buildFsDir = (dir, fileList = [], depth = 1) => {
+  const buildFsDir = (dir, fileList = [], depth = 1, projectPath = '') => {
     fs.readdirSync(dir).forEach(file => {
       const filePath = path.join(dir, file)
       const id = makeid()
+      if (ignored.includes(file)) {
+        return
+      }
+
+      const newProjectPath = `${projectPath}/${file}`
 
       if (fs.statSync(filePath).isDirectory()) {
         fileList.push({
@@ -31,17 +51,34 @@ const buildFs = homeDir => {
           type: 'dir',
           id,
           depth,
+          path: newProjectPath,
           expanded: false,
-          contents: buildFsDir(filePath, [], depth + 1),
+          contents: buildFsDir(filePath, [], depth + 1, newProjectPath),
         })
       } else {
         const extension = file.substr(file.lastIndexOf('.') + 1).toUpperCase()
+
+        if (imageExtensions.includes(extension)) {
+          fileList.push({
+            id,
+            depth,
+            extension,
+            name: file,
+            type: 'img',
+            path: newProjectPath,
+            iconColor: colorMap[extension] || '#579242',
+            contents: '',
+          })
+          return
+        }
+
         fileList.push({
           id,
           depth,
           extension,
           name: file,
           type: 'text',
+          path: newProjectPath,
           iconColor: colorMap[extension] || '#579242',
           contents: fs.readFileSync(filePath).toString(),
         })
@@ -51,10 +88,13 @@ const buildFs = homeDir => {
   }
 
   return {
-    name: '~',
+    id: makeid(),
+    name: 'codylandry',
     type: 'dir',
+    expanded: true,
     depth: 0,
-    contents: buildFsDir(homeDir)
+    path: 'codylandry',
+    contents: buildFsDir(homeDir, [], 1, 'codylandry')
   }
 }
 
