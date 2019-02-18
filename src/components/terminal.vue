@@ -30,8 +30,7 @@
         commands
       )
 
-      term.enqueue('cd codylandry')
-        .begin(document.getElementById('js-terminal'))
+      term.begin(document.getElementById('js-terminal'))
     }
   }
 </script>

@@ -27,7 +27,8 @@ const ignored = [
   '.idea',
   '.DS_Store',
   'file-system.json',
-  'amplify'
+  'amplify',
+  'aws-exports.js'
 ]
 
 const imageExtensions = [
@@ -60,6 +61,9 @@ const buildFs = homeDir => {
         const extension = file.substr(file.lastIndexOf('.') + 1).toUpperCase()
 
         if (imageExtensions.includes(extension)) {
+          const imgPath = dir === 'public'
+            ? `./${file}`
+            : `/img/${file}`
           fileList.push({
             id,
             depth,
@@ -68,7 +72,7 @@ const buildFs = homeDir => {
             type: 'img',
             path: newProjectPath,
             iconColor: colorMap[extension] || '#579242',
-            contents: '',
+            contents: imgPath,
           })
           return
         }
@@ -100,6 +104,7 @@ const buildFs = homeDir => {
 }
 
 if (process.argv.length) {
+
   const [_, _cmd, directory] = process.argv
 
   if (_cmd !== __filename) {

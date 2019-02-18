@@ -60,9 +60,6 @@
       activeFile () {
         return this.$store.state.activeFile
       },
-      openFiles () {
-        return this.$store.state.openFiles
-      },
       highlightWatches () {
         return {...this.openFiles, ...this.activeFile}
       }
@@ -72,12 +69,12 @@
         immediate: true,
         deep: true,
         handler () {
-          this.highlight()
+          this.loadCodemirror()
         }
       }
     },
     methods: {
-      async highlight () {
+      async loadCodemirror () {
         await this.$nextTick()
         if (this.$refs.files && this.activeFile.id) {
           const modeMap = {
