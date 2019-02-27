@@ -56,7 +56,6 @@ export class Terminal {
   }
 
   getCWD () {
-    console.log(this.dirString(this.cwd), this.cwd)
     return this.dirString(this.cwd)
   }
 

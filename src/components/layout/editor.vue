@@ -143,9 +143,11 @@
       display: flex
       justify-content: flex-start
       align-items: stretch
-      height: 100%
       overflow: scroll;
       margin-bottom: -17px;
       padding-bottom: 17px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      height: 42px
 
 </style>

@@ -56,6 +56,7 @@
     letter-spacing: 0.4px
     padding: 3px 8px
     white-space nowrap
+    height 25px
 
     &__icon
       display none

@@ -1,16 +1,23 @@
-// Copyright 2013 Clark DuVall
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+import { Auth } from 'aws-amplify'
+
+async function prompt (term, promptText) {
+  term.write(`\n${promptText}: `)
+  return await new Promise(resolve => {
+    term.newStdout()
+    term.scroll()
+    term.returnHandler = () => {
+      resolve(term.stdout().innerHTML)
+    }
+  })
+}
+
+function writeError (term, message) {
+  term.write(`
+    <pre style="color: red; white-space: pre-wrap;">
+      ${message}
+    </pre>
+  `)
+}
 
 export const commands = {
   cat (argv, cb) {
@@ -148,20 +155,83 @@ export const commands = {
     this._terminal.scroll()
   },
 
-  login (argv, cb) {
-    this._terminal.returnHandler = function () {
-      var username = this.stdout().innerHTML
+  async login (argv, cb) {
+    const term = this._terminal
+    const username = await prompt(term, 'Username')
+    const password = await prompt(term, 'Password')
 
-      this.scroll()
-      if (username)
-        this.config.username = username
-      this.write('<br>Password: ')
-      this.scroll()
-      this.returnHandler = function () { cb() }
-    }.bind(this._terminal)
-    this._terminal.write('Username: ')
-    this._terminal.newStdout()
-    this._terminal.scroll()
+    try {
+      await Auth.signIn({username, password})
+      term.write('\nSuccess!')
+    } catch (err) {
+      if (err.code === 'UserNotConfirmedException') {
+        term.write('\nEmail not confirmed. Resending verification email...')
+        await Auth.resendSignUp(username)
+        const code = await prompt(term, 'Enter Verification Code')
+        await Auth.confirmSignUp(username, code)
+        term.write(`\nConfirmed!`)
+        return cb()
+      }
+      writeError(term, err.message)
+    }
+    cb()
+  },
+
+  async passwd (argv, cb) {
+    const term = this._terminal
+    try {
+      const user = await Auth.currentAuthenticatedUser()
+      const oldPassword = await prompt(term, 'Old Password')
+      const newPassword = await prompt(term, 'New Password')
+      await Auth.changePassword(user, oldPassword, newPassword)
+    } catch (err) {
+      term.write(`\n${err}`)
+    }
+    cb()
+  },
+
+  async logout (argv, cb) {
+    const term = this._terminal
+    try {
+      await Auth.signOut()
+      await new Promise(res => setTimeout(res, 1000))
+      term.write('\nLogged out')
+    } catch (err) {
+      term.write(`\n${err.message}`)
+    }
+    cb()
+  },
+
+  async useradd (argv, cb) {
+    const term = this._terminal
+
+    const email = await prompt(term, 'Email Address')
+    const username = await prompt(term, 'Username')
+    let password1 = await prompt(term, 'Password')
+    let password2 = await prompt(term, 'Repeat Password')
+
+    while (password1 !== password2) {
+      term.write('\nPasswords do not match.  Try Again.')
+      password1 = await prompt(term, 'Password')
+      password2 = await prompt(term, 'Repeat Password')
+    }
+
+    try {
+      await Auth.signUp({ username, password: password1, attributes: { email } })
+      term.write(`\nsuccess`)
+    } catch (err) {
+      writeError(term,`\n${err.message}`)
+      cb()
+      return
+    }
+
+    try {
+      const code = await prompt(term,'Enter Confirmation Code')
+      await Auth.confirmSignUp(username, code)
+    } catch (err) {
+      writeError(term,`\n${err.message}`)
+    }
+    cb()
   },
 
   tree (argv, cb) {
