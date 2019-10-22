@@ -13,6 +13,10 @@ old personal webpage.  It was based on a bootstrap theme and, while it looked ni
 boring and definitely didn't show off my capabilities.  Once the idea hit, I couldnt' stop thinking
 about it.
 
+## Get In Touch!
+- [LinkedIn](https://www.linkedin.com/in/codylandry/)
+- [Twitter](https://twitter.com/CodyLandry17)
+
 ## Features
 
 - App implemented using:
